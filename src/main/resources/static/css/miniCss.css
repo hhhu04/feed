@@ -1,0 +1,60 @@
+@charset "UTF-8";
+
+.mainHeader {
+	text-align:right;
+	margin-right: 1%;
+	margin-top: 1%;
+	}
+
+.base {
+	text-align: center;
+}
+.feedTable {
+	width: 60%;
+	margin: auto;
+	text-align: center;
+}
+
+
+
+.location {
+	margin: 0 auto;
+	margin-top: 3%;
+}
+	
+
+.box2 {
+	text-align:left;
+	padding-left : 20%;
+	padding-top: 5%;
+	margin-left: 20%;
+	}
+	
+
+	
+.bt {
+	margin-top : 5%;
+}
+
+.list {
+	display: inline;
+}
+
+td{
+	padding: 10px;
+}
+.list_list {
+	list-style : none;
+	text-align:center;
+}
+
+.tb {
+	padding-left: 20%;
+}
+
+.tb {
+	padding: 5%;
+	padding: 15px;
+	margin: auto;
+
+}

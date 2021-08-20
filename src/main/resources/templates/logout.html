@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/miniCss.css">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="base">
+<h2>로그아웃 페이지</h2>
+<form id="logoutForm" method="post">
+    <p><input type="button" value="로그아웃" id="add"><input type="button" value="취소" id="back"></p>
+</form>
+<form id="kaForm" action="http://localhost:8080/out/kakao" method="get">
+    <input type="submit" value="카카오계정 로그아웃" id="add2">
+</form>
+</div>
+<script>
+    jQuery('#kaForm').submit(
+        function (){
+            $.removeCookie("token");
+        }
+    )
+</script>
+
+<script>
+    $(function(){
+
+            $.ajax({
+                beforeSend : function(xhr) {
+                },
+            });
+    });
+
+</script>
+
+<script>
+    $(function(){
+        $('#add').on('click', function(e) {
+            var token = $.cookie("token");
+            console.log(token);
+            $.ajax({
+                url:'/user/logout',
+                type:'POST',
+                beforeSend : function(xhr) {
+                    xhr.setRequestHeader("token",token);
+                },
+                success : function(data) {
+                    console.log(data);
+                    alert(data);
+                    if (data === 1) {
+                        $.removeCookie("token");
+                        $(location).attr('href', '/');
+                    }
+                },
+                error:function(data){
+                    console.log(data);
+                }
+            });
+        });
+    });
+</script>
+
+
+</body>
+</html>
