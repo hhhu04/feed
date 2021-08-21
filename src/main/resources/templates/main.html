@@ -11,12 +11,31 @@
     <div class="mainHeader">
         <p th:if="${user}=='게스트'"><button onclick="location.href='/login'">로그인</button></p>
     <p th:if="${user}!='게스트'"><button onclick="location.href='/login'">로그아웃</button></p></p>
-        <span th:text="${@environment.getProperty('test.url')}"></span>
+<!--        <span th:text="${@environment.getProperty('test.url')}"></span>-->
 </div>
 </header>
 <div class="base">
 <p th:text="${user}">손님><p th:if="${user}=='게스트'"></p>
 <button onclick="location.href='/feed'">게시판</button>
+    <br><br>
+    <hr>
+    <table class="feedTable">
+        <tr>
+            <td colspan="4">각 소스/jar 파일</td>
+        </tr>
+        <tr>
+            <td><a href="/down/newPark">newPark</a></td>
+            <td><a href="/down/dogram2">dogram2</a></td>
+        </tr>
+        <tr>
+            <td><a href="/down/park">park</a></td>
+            <td><a href="/down/dogram">dogram</a></td>
+        </tr>
+        <tr>
+            <td colspan="4">하단 프로젝트 제작 후 상단 안써본 것 적용해 제작<br>
+            war로 제작된 프로젝트는 알집으로</td>
+        </tr>
+    </table>
 </div>
 
 <script th:inline="javascript">

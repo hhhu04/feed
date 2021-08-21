@@ -1,12 +1,13 @@
 test:
-#  url: localhost
-  url: 118.67.133.148
+  url: localhost
+#  url: 118.67.133.148
 
 
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/feed?sueSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+#    url: jdbc:mysql://localhost:3306/feed?sueSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://118.67.133.148:3306/feed?sueSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
     password: 12345678
     username: sample
   jpa:
@@ -18,12 +19,6 @@ logging.level:
   org.hibernate.SQL: debug
   org.hibernate.type: trace
 
-jwt:
-  header: Authorization
-  #HS512 ????? ??? ??? ??? 512bit, ? 64byte ??? secret key? ???? ??.
-  #echo 'silvernine-tech-spring-boot-jwt-tutorial-secret-silvernine-tech-spring-boot-jwt-tutorial-secret'|base64
-  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
-  token-validity-in-seconds: 86400
 
 server:
   address: 0.0.0.0

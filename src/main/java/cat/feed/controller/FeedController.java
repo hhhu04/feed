@@ -11,8 +11,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequiredArgsConstructor
@@ -49,13 +53,14 @@ public class FeedController {
         }
     }
 
-    @GetMapping("/feed/{title}")
+    @GetMapping("/feed/{title}/{id}")
     public String feedDetail(@CookieValue(value="token", required=false) Cookie cookies,
-                             @PathVariable(name = "title") String title,Model model){
+                             @PathVariable(name = "title") String title,Model model,
+                             @PathVariable(name = "id") Long ids ){
         try {
             String id = cookies.getValue();
             Feed feed = new Feed();
-            feed = feedService.feedDetail(title,feed);
+            feed = feedService.feedDetail(title,feed,ids);
             model.addAttribute(feed);
             String token = cookies.getValue();
             String user = jwtTokenProvider.getUserPk(token);
@@ -63,6 +68,7 @@ public class FeedController {
             model.addAttribute("user",nickName);
             model.addAttribute("id",userService.id(user));
             model.addAttribute("userId", user);
+            model.addAttribute("img",feed.img(feed.getImg()).createGraphics());
             System.out.println(feed);
             model.addAttribute("title",title);
             return "feedDetail";
@@ -75,13 +81,18 @@ public class FeedController {
 
     @PostMapping("/user/feed")
     @ResponseBody
-    public int newFeed(@RequestBody Feed feed,@CookieValue(value="token", required=false) Cookie cookies){
+    public String newFeed(@CookieValue(value="token", required=false) Cookie cookies,
+                       @RequestParam("img")  MultipartFile img, Model model, ModelAndView mv, HttpServletRequest file,  HttpServletResponse response){
+        Feed feed = new Feed();
         try {
             String userId = jwtTokenProvider.getUserPk(cookies.getValue());
-            feedService.save(feed, userId);
-            return 1;
-        }catch (Exception e){
-            return -1;
+            feedService.save(feed, userId,img,model,mv,file,response);
+            return "<script> window.location = 'http://"+url+":8080/feed'</script>";
+        }catch (NullPointerException e){
+            return "<script>alert('login! '); window.location = 'http://"+url+":8080/login'</script>";
+        }
+        catch (Exception e){
+            return "<script>alert('빈칸을 채우세요 '); history.back()</script>";
         }
 
     }
@@ -97,6 +108,12 @@ public class FeedController {
     }
 
 
+    @PostMapping("/feed/delete")
+    @ResponseBody
+    public int delete(@RequestBody Feed feed){
+        feedService.delete(feed);
+        return 1;
+    }
 
 
 

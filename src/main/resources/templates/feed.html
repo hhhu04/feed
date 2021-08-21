@@ -55,8 +55,9 @@
                         td0(i + 1);
                         td0(data.content[i]['nickName'])
                         var title = data.content[i]['title'];
+                        var id = data.content[i]['id'];
                         // var link = "http://118.67.133.148:8080/feed/"+title;
-                        var link = "http://"+host+":8080/feed/"+title;
+                        var link = "http://"+host+":8080/feed/"+title+"/"+id;
                         td0('<a href="'+link+'">'+title+'</a>')
                         td0(data.content[i]['createdAt'])
                         td0(data.content[i]['comments'].length)
@@ -99,7 +100,8 @@
                td0(i + 1);
                td0(data.content[i]['nickName'])
                var title = data.content[i]['title'];
-               var link = "http://"+host+":8080/feed/"+title;
+               var id = data.content[i]['id'];
+               var link = "http://"+host+":8080/feed/"+title+"/"+id;
                // var link = "http://118.67.133.148:8080/feed/"+title;
                // var link = "http://192.168.93.129:8080/feed/"+title;
                td0('<a href="'+link+'">'+title+'</a>')

@@ -5,15 +5,22 @@ import cat.feed.service.OauthService;
 import cat.feed.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.security.Principal;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,6 +31,9 @@ public class BaseController {
     private final UserService userService;
     @Value("${test.url}")
     private  String url;
+
+//    private String paths = "/home/cat/web/test/";
+    private String paths = "/usr/local/down/";
 
     @GetMapping("/")
     public String main(Model model,@CookieValue(value="token", required=false) Cookie cookie){
@@ -76,6 +86,82 @@ public class BaseController {
         }
     }
 
+
+    @GetMapping("/down/dogram")
+    public ResponseEntity<Object> download(){
+        String path = paths+"dogram-master.zip";
+
+        try{
+            Path fileFath = Paths.get(path);
+            Resource resource = new InputStreamResource(Files.newInputStream(fileFath));
+
+            File file = new File(path);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentDisposition(ContentDisposition.builder("attachment").filename(file.getName()).build());
+            return new ResponseEntity<Object>(resource,headers, HttpStatus.OK);
+
+        }catch (Exception e){
+            return new ResponseEntity<Object>(null,HttpStatus.CONFLICT);
+        }
+    }
+
+    @GetMapping("/down/dogram2")
+    public ResponseEntity<Object> download2(){
+        String path = paths+"dogram2-0.0.1-SNAPSHOT.jar";
+
+        try{
+            Path fileFath = Paths.get(path);
+            Resource resource = new InputStreamResource(Files.newInputStream(fileFath));
+
+            File file = new File(path);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentDisposition(ContentDisposition.builder("attachment").filename(file.getName()).build());
+            return new ResponseEntity<Object>(resource,headers, HttpStatus.OK);
+
+        }catch (Exception e){
+            return new ResponseEntity<Object>(null,HttpStatus.CONFLICT);
+        }
+    }
+
+    @GetMapping("/down/park")
+    public ResponseEntity<Object> download3(){
+        String path = paths+"study-master.zip";
+
+        try{
+            Path fileFath = Paths.get(path);
+            Resource resource = new InputStreamResource(Files.newInputStream(fileFath));
+
+            File file = new File(path);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentDisposition(ContentDisposition.builder("attachment").filename(file.getName()).build());
+            return new ResponseEntity<Object>(resource,headers, HttpStatus.OK);
+
+        }catch (Exception e){
+            return new ResponseEntity<Object>(null,HttpStatus.CONFLICT);
+        }
+    }
+
+    @GetMapping("/down/newPark")
+    public ResponseEntity<Object> download4(){
+        String path = paths+"newPark-0.0.1-SNAPSHOT.jar";
+
+        try{
+            Path fileFath = Paths.get(path);
+            Resource resource = new InputStreamResource(Files.newInputStream(fileFath));
+
+            File file = new File(path);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentDisposition(ContentDisposition.builder("attachment").filename(file.getName()).build());
+            return new ResponseEntity<Object>(resource,headers, HttpStatus.OK);
+
+        }catch (Exception e){
+            return new ResponseEntity<Object>(null,HttpStatus.CONFLICT);
+        }
+    }
 
 
 }
