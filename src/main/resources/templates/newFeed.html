@@ -10,11 +10,11 @@
 </head>
 <body>
 <div class="base">
-<form>
-    <p>제목 : <input type="text" id="title"></p>
-    <p>내용 : <input type="text" id="body"></p>
-    <p>사진 : <input type="text" id="img"></p>
-    <input type="button" value="저장" id="add">
+<form action="/user/feed" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
+    <p>제목 : <input type="text" id="title" name="title"></p>
+    <p>내용 : <input type="text" id="body" name="body" size="50"></p>
+    <p>사진 : <input type="file" id="img" name="img"></p>
+    <input type="submit" value="저장" id="add2">
     <input type="button" value="취소" id="back">
 </form>
 </div>
@@ -44,7 +44,8 @@
                 type:'POST',
                 data : JSON.stringify(str),
                 dataType : 'json',
-                contentType : 'application/json',
+                processData: false,
+                contentType : false,
                 beforeSend : function(xhr) {
                     xhr.setRequestHeader("token",token);
                 },

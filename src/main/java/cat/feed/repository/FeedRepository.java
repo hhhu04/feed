@@ -16,7 +16,7 @@ public interface FeedRepository extends PagingAndSortingRepository<Feed,Long> {
 //    Page<Feed> findAll(Pageable pageable);
     Page<Feed> findAllByOrderByIdDesc(Pageable pageable);
 
-    Feed findFeedByTitle(String title);
+    Feed findFeedByTitleAndId(String title,Long id);
 
 
 
