@@ -56,7 +56,7 @@ public class Feed {
         return feed;
     }
 
-    public Feed upLoad(MultipartFile img, Model model, ModelAndView mv, HttpServletRequest file, Feed feed, Long id, HttpServletResponse response) throws Exception {
+    public Feed upLoad(MultipartFile img, Model model, ModelAndView mv, HttpServletRequest file, Feed feed, Long id, HttpServletResponse response,String path) throws Exception {
         file.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=UTF-8");
         feed.setTitle(file.getParameter("title"));
@@ -67,13 +67,13 @@ public class Feed {
         if(feed.getTitle().length() < 4) throw new Exception();
         if(feed.getBody().length() < 4) throw new Exception();
 
-        feed.setImg(imgSet(img, mv,model));
+        feed.setImg(imgSet(img, mv,model,path));
 
 
         return feed;
      }
 
-    private String imgSet(MultipartFile file,ModelAndView mv, Model model) throws IOException {
+    private String imgSet(MultipartFile file,ModelAndView mv, Model model,String path) throws IOException {
         Date dt = new Date();
         SimpleDateFormat date = new SimpleDateFormat("yyMMddHHmmss");
 
@@ -81,7 +81,7 @@ public class Feed {
 
         file.getOriginalFilename();
         if(!file.getOriginalFilename().isEmpty()) {
-            file.transferTo(new File("/home/cat/web/test/img", imgName));
+            file.transferTo(new File(path, imgName));
             model.addAttribute("msg", "File uploaded successfully.");
             img = "img/"+imgName;
             System.out.println("99");

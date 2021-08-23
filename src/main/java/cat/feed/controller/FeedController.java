@@ -27,6 +27,8 @@ public class FeedController {
     private final UserService userService;
     @Value("${test.url}")
     private  String url;
+    @Value("${test.path}")
+    private String path;
 
     @GetMapping("favicon.ico") @ResponseBody public void returnNoFavicon() { }
 
@@ -68,7 +70,7 @@ public class FeedController {
             model.addAttribute("user",nickName);
             model.addAttribute("id",userService.id(user));
             model.addAttribute("userId", user);
-            model.addAttribute("img",feed.img(feed.getImg()).createGraphics());
+            model.addAttribute("img","../../"+feed.getImg());
             System.out.println(feed);
             model.addAttribute("title",title);
             return "feedDetail";
@@ -86,7 +88,7 @@ public class FeedController {
         Feed feed = new Feed();
         try {
             String userId = jwtTokenProvider.getUserPk(cookies.getValue());
-            feedService.save(feed, userId,img,model,mv,file,response);
+            feedService.save(feed, userId,img,model,mv,file,response,path);
             return "<script> window.location = 'http://"+url+":8080/feed'</script>";
         }catch (NullPointerException e){
             return "<script>alert('login! '); window.location = 'http://"+url+":8080/login'</script>";
