@@ -24,9 +24,9 @@ public class FeedService {
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
 
-    public void save(Feed feed, String email, MultipartFile img, Model model, ModelAndView mv, HttpServletRequest file, HttpServletResponse response) throws Exception{
+    public void save(Feed feed, String email, MultipartFile img, Model model, ModelAndView mv, HttpServletRequest file, HttpServletResponse response,String path) throws Exception{
 //        feed = feed.newFeed(feed, userRepository.findByUserId(email).get().getId());
-        feed = feed.upLoad(img,model,mv,file,feed,userRepository.findByUserId(email).get().getId(),response);
+        feed = feed.upLoad(img,model,mv,file,feed,userRepository.findByUserId(email).get().getId(),response,path);
         feed.setNickName(userRepository.findByUserId(email).get().getNickName());
         feedRepository.save(feed);
     }
