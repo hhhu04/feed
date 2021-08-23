@@ -11,7 +11,6 @@
     <div class="mainHeader">
         <p th:if="${user}=='게스트'"><button onclick="location.href='/login'">로그인</button></p>
     <p th:if="${user}!='게스트'"><button onclick="location.href='/login'">로그아웃</button></p></p>
-<!--        <span th:text="${@environment.getProperty('test.url')}"></span>-->
 </div>
 </header>
 <div class="base">
