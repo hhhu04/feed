@@ -100,9 +100,6 @@ public class FeedController {
     @GetMapping("/allFeed")
     @ResponseBody
     public Page<Feed> allFeed(Pageable pageable){
-//        List<Feed> list = new ArrayList<>();
-//        list = feedService.AllFeed(pageable);
-//        PageRequest pageRequest = PageRequest.of(2,2, Sort.Direction.DESC);
         Page<Feed>  list= feedService.AllFeed(pageable);
         return list;
     }
