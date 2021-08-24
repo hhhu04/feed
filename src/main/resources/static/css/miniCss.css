@@ -9,6 +9,11 @@
 .base {
 	text-align: center;
 }
+
+.baseButton {
+	border-radius: 10%;
+}
+
 .feedTable {
 	width: 60%;
 	margin: auto;
@@ -18,6 +23,11 @@
 .kakao {
 	border: white;
 	background-color: white;
+}
+
+.imgDetail {
+	width: 1000px;
+	height: 700px;
 }
 
 
