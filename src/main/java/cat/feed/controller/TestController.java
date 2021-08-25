@@ -30,59 +30,16 @@ import java.nio.file.Paths;
 @RequiredArgsConstructor
 public class TestController {
 
-    private final FeedRepository feedRepository;
 
-    @GetMapping("/down")
-    public ResponseEntity<Object> download(){
-        String path = "/home/cat/web/test/feed.sql";
-
-        try{
-            Path fileFath = Paths.get(path);
-            Resource resource = new InputStreamResource(Files.newInputStream(fileFath));
-
-            File file = new File(path);
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentDisposition(ContentDisposition.builder("attachment").filename(file.getName()).build());
-            return new ResponseEntity<Object>(resource,headers, HttpStatus.OK);
-
-        }catch (Exception e){
-            return new ResponseEntity<Object>(null,HttpStatus.CONFLICT);
-        }
+    @GetMapping("/test")
+    public String test(@CookieValue(value="token", required=false) Cookie cookies){
+        return cookies.getValue();
     }
 
-//    @PostMapping(value = "/newFeed")
+    @PostMapping("user/test")
     @ResponseBody
-    public int create(@RequestParam("img") MultipartFile img, HttpServletRequest dto, Model model,
-                      ModelAndView mv, @CookieValue(value="id", required=false) Cookie cookie, HttpServletResponse response) {
-        try {
-            System.out.println(dto.toString());
-//            Long num = userService.checkCookie(cookie.getValue());
-//            String userImg = userService.findImg(cookie.getValue());
-//            return communityService.create(img,model,mv,dto,community,num,userImg,response);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("asd");
-            return -1;
-        }
-        return 0;
+    public String feed(@RequestParam("title") String title,@RequestParam("body") String body,@RequestParam("img") MultipartFile img){
+        return null;
     }
-
-
-
-
-
-
-
-    @PostConstruct
-    public void initializing(){
-        for(int i=0;i<100;i++){
-            Feed feed = Feed.builder()
-                    .title("title"+i)
-                    .body("body"+i).build();
-        }
-    }
-
-
 
 }

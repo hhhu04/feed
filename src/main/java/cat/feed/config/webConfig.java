@@ -44,14 +44,13 @@ public class webConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/user/login").anonymous()
                 .antMatchers("/user/join/**").anonymous()
-                .antMatchers("/user/feed").permitAll()
+                .antMatchers("/user/myPage","/user/update").permitAll()
                 .antMatchers("/user/**").authenticated()
                 .antMatchers("/comment/new").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(tokenProvider),
                         UsernamePasswordAuthenticationFilter.class);
-        // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
 
         http.logout().logoutSuccessUrl("/");
 

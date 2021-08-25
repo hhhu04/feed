@@ -10,11 +10,13 @@
 </head>
 <body>
 <div class="base">
+    <h2>게시판 수정</h2>
 <form id="test" enctype="multipart/form-data" accept-charset="UTF-8">
     <p>제목 : <input type="text" id="title" name="title"></p>
     <p>내용 : <input type="text" id="body" name="body" size="50"></p>
     <p>사진 : <input type="file" id="img" name="img"></p>
-    <input type="button" value="저장" id="add">
+    <input type="hidden" id="id" name="id" th:value="${id}">
+    <input type="button" value="저장" id="add2">
     <input type="button" value="취소" id="back">
 </form>
 </div>
@@ -29,7 +31,7 @@
 
 <script>
     $(function(){
-        $('#add').on('click', function(e) {
+        $('#add2').on('click', function(e) {
             var token = $.cookie("token");
             console.log(token);
 
@@ -38,7 +40,7 @@
             var data = new FormData(form);
 
             $.ajax({
-                url:'/user/feed',
+                url:'/user/feed/update',
                 type:'POST',
                 enctype: 'multipart/form-data',
                 data: data,
@@ -54,15 +56,6 @@
                     if (data === 1) {
                         $.removeCookie("token");
                         $(location).attr('href', '/feed');
-                    }
-                    else if(data === -1){
-                        alert("로그인 확인")
-                    }
-                    else if(data === -2){
-                        alert("빈칸을 4글자 이상 채우세요")
-                    }
-                    else {
-                        alert("서버오류 관리자 문의")
                     }
                 },
                 error:function(data){
