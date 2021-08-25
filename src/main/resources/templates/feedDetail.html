@@ -15,7 +15,7 @@
 <div class="base">
     <h2>게시글 상세보기</h2>
     <table class="feedTable" border="1">
-        <caption><button onclick="location.href='/feed/update'"> 수정 </button><button onclick="history.back()"> 뒤로 </button></caption>
+        <caption><button id="action"> 수정 </button><button onclick="history.back()"> 뒤로 </button></caption>
         <tr>
             <td>제목</td>
             <td colspan="2"><span th:text="${feed.getTitle()}"></span></td>
@@ -45,6 +45,18 @@
     </table>
 
 </div>
+
+
+<script th:onclick="javascript">
+    $(function() {
+
+        $('#action').on('click', function (e) {
+            var id = [[${feed.getId()}]];
+            var url = '/feed/update/'+id;
+            $(location).attr('href',url);
+        });
+    });
+</script>
 
 <script th:inline="javascript">
     var UserId = [[${id}]];

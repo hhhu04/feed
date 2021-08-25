@@ -59,4 +59,13 @@ public class UserService  {
     }
 
     public long id(String userId){return userRepository.findByUserId(userId).get().getId();}
+
+    public User userInfo(User user) {
+        return userRepository.findByUserId(user.getUserId()).get();
+    }
+
+    public void update(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+    }
 }

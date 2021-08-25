@@ -43,7 +43,13 @@ public class User implements UserDetails{
 
     private String type;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    private List<Feed> feeds = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    private List<Comment> comments = new ArrayList<>();
 
     public User userJoin(User user, PasswordEncoder passwordEncoder){
         user.setPassword(passwordEncoder.encode(user.getPassword()));

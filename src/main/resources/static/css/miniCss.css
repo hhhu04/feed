@@ -6,6 +6,10 @@
 	margin-top: 1%;
 	}
 
+.topNav {
+	display: flex;
+}
+
 .base {
 	text-align: center;
 }
@@ -26,8 +30,8 @@
 }
 
 .imgDetail {
-	width: 1000px;
-	height: 700px;
+	width: 700px;
+	height: 500px;
 }
 
 

@@ -1,5 +1,6 @@
 package cat.feed.controller;
 
+import cat.feed.entity.User;
 import cat.feed.jwt.JwtTokenProvider;
 import cat.feed.service.OauthService;
 import cat.feed.service.UserService;
@@ -48,6 +49,41 @@ public class BaseController {
             model.addAttribute("user","게스트");
             return "main";
         }
+    }
+
+    @GetMapping("/user/myPage")
+    public String myPage(Model model, @CookieValue(value="token", required=false) Cookie cookie, User user){
+        try{
+            String token = cookie.getValue();
+            String userId = jwtTokenProvider.getUserPk(token);
+            if(userId == null) throw new Exception();
+            model.addAttribute("user");
+            user.setUserId(userId);
+            user = userService.userInfo(user);
+            user.setPassword(null);
+//            model.addAttribute("info",user);
+            return "myPage";
+        }catch (Exception e){
+            return "main";
+        }
+    }
+
+    @GetMapping("/user/update")
+    public String userUpdate(@CookieValue(value="token", required=false) Cookie cookie,Model model,User user){
+        try{
+            String token = cookie.getValue();
+            String userId = jwtTokenProvider.getUserPk(token);
+            if(userId == null) throw new Exception();
+            user.setUserId(userId);
+            user = userService.userInfo(user);
+            user.setPassword(null);
+            model.addAttribute("user",user);
+            return "userUpdate";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "main";
+        }
+
     }
 
     @GetMapping("/login" )

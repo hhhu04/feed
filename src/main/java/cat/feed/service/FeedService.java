@@ -1,6 +1,7 @@
 package cat.feed.service;
 
 import cat.feed.entity.Feed;
+import cat.feed.exception.FeedException;
 import cat.feed.repository.FeedRepository;
 import cat.feed.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,18 +25,21 @@ public class FeedService {
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
 
-    public void save(Feed feed, String email, MultipartFile img, Model model, ModelAndView mv, HttpServletRequest file, HttpServletResponse response,String path) throws Exception{
-//        feed = feed.newFeed(feed, userRepository.findByUserId(email).get().getId());
-        feed = feed.upLoad(img,model,mv,file,feed,userRepository.findByUserId(email).get().getId(),response,path);
+
+    public void save(Feed feed, String email, MultipartFile img,String path) throws FeedException,Exception{
+        feed = feed.upLoad(img,feed,userRepository.findByUserId(email).get().getId(),path);
+        feed.setNickName(userRepository.findByUserId(email).get().getNickName());
+        feedRepository.save(feed);
+    }
+
+    public void update(Feed feed, String email, MultipartFile img,String path) throws FeedException,Exception{
+        feed = feed.upLoad(img,feed,userRepository.findByUserId(email).get().getId(),path);
         feed.setNickName(userRepository.findByUserId(email).get().getNickName());
         feedRepository.save(feed);
     }
 
 
     public Page<Feed> AllFeed(Pageable pageable) {
-//        List<Feed> list = new ArrayList<>();
-//        Sort.by(Sort.Direction.DESC,"id"),
-//        list = feedRepository.findAll(pageable);
         Page<Feed> list = feedRepository.findAllByOrderByIdDesc(pageable);
         return list;
     }
@@ -48,5 +52,9 @@ public class FeedService {
     public void delete(Feed feed) {
         feed = feedRepository.findById(feed.getId()).get();
         feedRepository.delete(feed);
+    }
+
+    public Feed feed(long id) {
+        return feedRepository.findById(id).get();
     }
 }
