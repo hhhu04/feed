@@ -13,9 +13,11 @@
     <p class="mainHeader"><button onclick="location.href='/login'">로그아웃</button></p>
 </header>
 <div class="base">
+
+
     <h2>게시글 상세보기</h2>
     <table class="feedTable" border="1">
-        <caption><button id="action"> 수정 </button><button onclick="history.back()"> 뒤로 </button></caption>
+        <caption><button th:if="${id}==${feed.getUserId()}" id="action"> 수정 </button><button th:if="${id}==${feed.getUserId()}" id="delete"> 삭제 </button><button onclick="history.back()"> 뒤로 </button></caption>
         <tr>
             <td>제목</td>
             <td colspan="2"><span th:text="${feed.getTitle()}"></span></td>
@@ -45,6 +47,49 @@
     </table>
 
 </div>
+
+<script th:onclick="javascript">
+    $(function() {
+
+            $('#delete').on('click', function (e) {
+                if(!confirm("삭제하시겠습니까?")){
+                    location.reload()
+                }
+                else{
+                    var feedId = [[${feed.getId}]]
+                    var feedUserId = [[${feed.getUserId}]]
+                    var str = {"id":feedId,"userId":feedUserId}
+                    var token = $.cookie("token")
+                    $.ajax({
+                        url: "/feed/delete",
+                        type: 'POST',
+                        data : JSON.stringify(str),
+                        dataType : 'json',
+                        contentType : 'application/json',
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("token", token);
+                        },
+                        success: function (data) {
+                            if(data === 1) {
+                                history.back();
+                            }
+                            else if(data === -1){
+                                alert("작성자 혹은 관리자가 아닙니다.")
+                            }
+                            else if(data === -2){
+                                $(location).attr('href', '/login');
+                            }
+                        },
+                        error: function (data) {
+                            console.log(data);
+                        }
+
+                    })
+                }
+            });
+
+    });
+</script>
 
 
 <script th:onclick="javascript">

@@ -46,7 +46,9 @@ public class webConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/join/**").anonymous()
                 .antMatchers("/user/myPage","/user/update").permitAll()
                 .antMatchers("/user/**").authenticated()
+                .antMatchers("/feed/delete").authenticated()
                 .antMatchers("/comment/new").authenticated()
+                .antMatchers("/admin/api/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(tokenProvider),

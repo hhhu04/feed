@@ -1,21 +1,14 @@
 package cat.feed.service;
 
 import cat.feed.entity.Feed;
-import cat.feed.exception.FeedException;
 import cat.feed.repository.FeedRepository;
 import cat.feed.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,13 +19,13 @@ public class FeedService {
     private final UserRepository userRepository;
 
 
-    public void save(Feed feed, String email, MultipartFile img,String path) throws FeedException,Exception{
+    public void save(Feed feed, String email, MultipartFile img,String path) throws Exception{
         feed = feed.upLoad(img,feed,userRepository.findByUserId(email).get().getId(),path);
         feed.setNickName(userRepository.findByUserId(email).get().getNickName());
         feedRepository.save(feed);
     }
 
-    public void update(Feed feed, String email, MultipartFile img,String path) throws FeedException,Exception{
+    public void update(Feed feed, String email, MultipartFile img,String path) throws Exception{
         feed = feed.upLoad(img,feed,userRepository.findByUserId(email).get().getId(),path);
         feed.setNickName(userRepository.findByUserId(email).get().getNickName());
         feedRepository.save(feed);
@@ -56,5 +49,17 @@ public class FeedService {
 
     public Feed feed(long id) {
         return feedRepository.findById(id).get();
+    }
+
+    public Long userId(long id) {
+        return feedRepository.findById(id).get().getUserId();
+    }
+
+    public long AllFeedAdmin() {
+        return feedRepository.count();
+    }
+
+    public long count() {
+        return feedRepository.count();
     }
 }

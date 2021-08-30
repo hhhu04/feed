@@ -43,7 +43,6 @@ public class BaseController {
             String user = jwtTokenProvider.getUserPk(token);
             String nickName = userService.nickName(user);
             model.addAttribute("user",nickName+"님 환영합니다.");
-            System.out.println(url);
             return "main";
         }catch (Exception e){
             model.addAttribute("user","게스트");
@@ -198,6 +197,8 @@ public class BaseController {
             return new ResponseEntity<Object>(null,HttpStatus.CONFLICT);
         }
     }
+
+
 
 
 }
