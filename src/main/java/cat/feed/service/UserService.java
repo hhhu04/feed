@@ -1,5 +1,6 @@
 package cat.feed.service;
 
+import cat.feed.dto.AllDto;
 import cat.feed.entity.User;
 import cat.feed.jwt.JwtTokenProvider;
 import cat.feed.repository.UserRepository;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,7 +24,6 @@ public class UserService  {
     private final JwtTokenProvider jwtTokenProvider;
 
     public boolean checkUser(User user){
-        System.out.println(userRepository.existsByUserId(user.getUserId()));
         return userRepository.existsByUserId(user.getUserId());
     }
 
@@ -66,6 +67,22 @@ public class UserService  {
 
     public void update(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+    }
+
+    public long key(String userPk) {
+        return userRepository.findByUserId(userPk).get().getId();
+    }
+
+    public AllDto allUser(AllDto dto) {
+        dto.setUserList(userRepository.findByRoles("ROLE_USER"));
+        dto.setAdminList(userRepository.findByRoles("ROLE_ADMIN"));
+        dto.setUserCount(userRepository.countByRoles("ROLE_USER"));
+        dto.setAdminCount(userRepository.countByRoles("ROLE_ADMIN"));
+        return dto;
+    }
+
+    public void adminCreate(User user) {
         userRepository.save(user);
     }
 }

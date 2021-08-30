@@ -100,7 +100,6 @@ public class UserController {
     @GetMapping(value = "/{socialLoginType}/login")
     public void socialLoginType(
             @PathVariable(name = "socialLoginType") String socialLoginType) {
-        System.out.println(">> 사용자로부터 SNS 로그인 요청을 받음 :: {} Social Login"+socialLoginType);
         oauthService.request(socialLoginType,url);
     }
 
@@ -108,7 +107,6 @@ public class UserController {
     public String callback(
             @PathVariable(name = "socialLoginType") String socialLoginType,
             @RequestParam(name = "code") String code, HttpServletResponse response,HttpServletRequest request) {
-        System.out.println(">> 소셜 로그인 API 서버로부터 받은 code :: {}" + code);
         String email = oauthService.requestAccessToken(socialLoginType, code,url);
 
         if (userService.check(email, socialLoginType)) {
@@ -161,5 +159,11 @@ public class UserController {
         }
         return 1;
     }
+
+
+
+    ///admin
+
+
 
 }

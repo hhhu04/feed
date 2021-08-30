@@ -20,9 +20,17 @@
     <form>
         <p th:if="${user.getType()}!='kakao'">비밀번호 변경 : <input type="password" id="password"></p>
         <p>닉네임 변경 : <input type="text" id="nickName"></p>
-        <input type="button" id="add" th:value="수정">
+        <input type="button" id="add" th:value="수정"><input type="button" id="back"value="취소">
     </form>
 </div>
+
+<script>
+    $(function() {
+        $('#add').on('click', function (e) {
+            history.back()
+        });
+    });
+</script>
 
 <script th:inline="javascript">
     $(function() {

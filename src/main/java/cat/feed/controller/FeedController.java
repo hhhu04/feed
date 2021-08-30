@@ -1,7 +1,6 @@
 package cat.feed.controller;
 
 import cat.feed.entity.Feed;
-import cat.feed.exception.FeedException;
 import cat.feed.jwt.JwtTokenProvider;
 import cat.feed.service.FeedService;
 import cat.feed.service.UserService;
@@ -14,12 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.persistence.Id;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 
 @Controller
@@ -78,7 +73,6 @@ public class FeedController {
             model.addAttribute("id",userService.id(user));
             model.addAttribute("userId", user);
             model.addAttribute("img","../../"+feed.getImg());
-            System.out.println(feed);
             model.addAttribute("title",title);
             return "feedDetail";
         }catch (Exception e){
@@ -87,9 +81,17 @@ public class FeedController {
     }
 
     @GetMapping("/feed/update/{id}")
-    public String updateFeed(Model model, @PathVariable String id){
-        model.addAttribute("id", id);
-        return "updateFeed";
+    public String updateFeed(Model model, @PathVariable long id,@CookieValue(value="token") Cookie cookies){
+       try {
+           Long userId = feedService.userId(id);
+           String userPk = jwtTokenProvider.getUserPk(cookies.getValue());
+           long userKey = userService.key(userPk);
+           model.addAttribute("id", id);
+           if (userId == userKey) return "updateFeed";
+           else return "error/403";
+       }catch (Exception e){
+           return "login";
+       }
     }
 
 
@@ -131,7 +133,6 @@ public class FeedController {
         Feed feed = new Feed();
         feed.setTitle(title);
         feed.setBody(body);
-        System.out.println(feed);
         try {
             String userId = jwtTokenProvider.getUserPk(cookies.getValue());
             feed.setCreatedAt(LocalDateTime.now());
@@ -139,9 +140,6 @@ public class FeedController {
             return 1;
         }catch (NullPointerException e){
             return -1;
-        }
-        catch (FeedException e){
-            return -2;
         }
         catch (Exception e){
             return -3;
@@ -159,9 +157,18 @@ public class FeedController {
 
     @PostMapping("/feed/delete")
     @ResponseBody
-    public int delete(@RequestBody Feed feed){
-        feedService.delete(feed);
-        return 1;
+    public int delete(@RequestBody Feed feed,@CookieValue(value="token", required=false) Cookie cookies){
+        try {
+            String userPk = jwtTokenProvider.getUserPk(cookies.getValue());
+            long userKey = userService.key(userPk);
+            if(userKey == feed.getUserId()) {
+                feedService.delete(feed);
+                return 1;
+            }
+            else return -1;
+        }catch (Exception e){
+            return -2;
+        }
     }
 
 

@@ -1,18 +1,13 @@
 package cat.feed.entity;
 
-import cat.feed.exception.FeedException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -57,10 +52,9 @@ public class Feed {
         return feed;
     }
 
-    public Feed upLoad(MultipartFile img,Feed feed, Long id,String path) throws FeedException,Exception {
+    public Feed upLoad(MultipartFile img,Feed feed, Long id,String path) throws Exception {
         feed.setUserId(id);
         feed.setImg(imgSet(img,path));
-
 
         return feed;
     }

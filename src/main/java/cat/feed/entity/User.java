@@ -1,9 +1,6 @@
 package cat.feed.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +15,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -53,13 +51,13 @@ public class User implements UserDetails{
 
     public User userJoin(User user, PasswordEncoder passwordEncoder){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles("USER");
+        user.setRoles("ROLE_USER");
         user.setCreatedAt(LocalDateTime.now());
         return user;
     }
 
     public User kakaoJoin(User user){
-        user.setRoles("USER");
+        user.setRoles("ROLE_USER");
         user.setCreatedAt(LocalDateTime.now());
         user.setType("kakao");
         return user;
@@ -68,7 +66,7 @@ public class User implements UserDetails{
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         ArrayList<GrantedAuthority> auth = new ArrayList<>();
-        auth.add(new SimpleGrantedAuthority(roles));
+        auth.add(new SimpleGrantedAuthority(this.getRoles()));
         return auth;
     }
 

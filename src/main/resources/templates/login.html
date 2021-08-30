@@ -59,7 +59,7 @@
                     console.log(data);
                     alert(data);
                     if (data === 1) {
-                        $(location).attr('href', '/');
+                        history.back()
                     }
                 },
                 error:function(data){

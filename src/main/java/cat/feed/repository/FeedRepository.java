@@ -18,6 +18,6 @@ public interface FeedRepository extends PagingAndSortingRepository<Feed,Long> {
 
     Feed findFeedByTitleAndId(String title,Long id);
 
-
-
+    @Override
+    long count();
 }
