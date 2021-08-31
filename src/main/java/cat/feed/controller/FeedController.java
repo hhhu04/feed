@@ -62,20 +62,23 @@ public class FeedController {
                              @PathVariable(name = "title") String title,Model model,
                              @PathVariable(name = "id") Long ids ){
         try {
-            String id = cookies.getValue();
             Feed feed = new Feed();
             feed = feedService.feedDetail(title,feed,ids);
             model.addAttribute(feed);
             String token = cookies.getValue();
             String user = jwtTokenProvider.getUserPk(token);
             String nickName = userService.nickName(user);
+            long userKey = userService.id(user);
+            String role = userService.getRole(userKey);
+            model.addAttribute("role",role);
             model.addAttribute("user",nickName);
-            model.addAttribute("id",userService.id(user));
+            model.addAttribute("id",userKey);
             model.addAttribute("userId", user);
             model.addAttribute("img","../../"+feed.getImg());
             model.addAttribute("title",title);
             return "feedDetail";
         }catch (Exception e){
+            e.printStackTrace();
             return "login";
         }
     }

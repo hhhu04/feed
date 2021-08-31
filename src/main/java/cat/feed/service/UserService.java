@@ -85,4 +85,13 @@ public class UserService  {
     public void adminCreate(User user) {
         userRepository.save(user);
     }
+
+    public String getRole(long userKey) {
+        return userRepository.findById(userKey).get().getRoles();
+    }
+
+    public void delete(User user) {
+        user = userRepository.findByUserId(user.getUserId()).get();
+        userRepository.delete(user);
+    }
 }

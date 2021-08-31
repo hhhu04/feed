@@ -17,7 +17,7 @@
 
     <h2>게시글 상세보기</h2>
     <table class="feedTable" border="1">
-        <caption><button th:if="${id}==${feed.getUserId()}" id="action"> 수정 </button><button th:if="${id}==${feed.getUserId()}" id="delete"> 삭제 </button><button onclick="history.back()"> 뒤로 </button></caption>
+        <caption><button th:if="${role} == 'ROLE_ADMIN'" id="adminDelete"> 관리자 삭제 </button><button th:if="${id}==${feed.getUserId()}" id="action"> 수정 </button><button th:if="${id}==${feed.getUserId()}" id="delete"> 삭제 </button><button onclick="history.back()"> 뒤로 </button></caption>
         <tr>
             <td>제목</td>
             <td colspan="2"><span th:text="${feed.getTitle()}"></span></td>
@@ -25,7 +25,7 @@
         </tr>
         <tr>
             <td colspan="4"><span th:text="${feed.getCreatedAt()}"></span></td>
-        </tr>
+        </tr>가
         <tr>
             <td>사진</td>
             <td colspan="3"><img class="imgDetail" th:src="${img}"></td>
@@ -47,6 +47,49 @@
     </table>
 
 </div>
+
+<script th:onclick="javascript">
+    $(function() {
+
+        $('#adminDelete').on('click', function (e) {
+            if(!confirm("삭제하시겠습니까?")){
+                location.reload()
+            }
+            else{
+                var feedId = [[${feed.getId}]]
+                var feedUserId = [[${feed.getUserId}]]
+                var str = {"id":feedId,"userId":feedUserId}
+                var token = $.cookie("token")
+                $.ajax({
+                    url: "/admin/api/feed/delete",
+                    type: 'POST',
+                    data : JSON.stringify(str),
+                    dataType : 'json',
+                    contentType : 'application/json',
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("token", token);
+                    },
+                    success: function (data) {
+                        if(data === 1) {
+                            history.back();
+                        }
+                        else if(data === -1){
+                            alert("작성자 혹은 관리자가 아닙니다.")
+                        }
+                        else if(data === -2){
+                            $(location).attr('href', '/login');
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+
+                })
+            }
+        });
+
+    });
+</script>
 
 <script th:onclick="javascript">
     $(function() {
@@ -106,6 +149,7 @@
 <script th:inline="javascript">
     var UserId = [[${id}]];
     var data = [[${feed}]];
+    var role = [[${role}]];
     console.log(data['comments'])
             var list = ["번호","작성자",'댓글 내용','시간'];
             tr0();
@@ -136,6 +180,9 @@
                 } else {
                     td0('  ');
                 }
+                if(role === 'ROLE_ADMIN'){
+                    td0('<form method="post"><input type="hidden" id="id" value="'+commentId+'"><input type="button" id="adCommentDelete" value="관리자 삭제"></form>');
+                }
             }
 
     function tr0(){
@@ -149,6 +196,36 @@
         $list = $('#commentTable');
         $list.append('<td>' + a+ '</td>');
     };
+</script>
+
+<script>
+    $(function() {
+
+        $('#adCommentDelete').on('click', function (e) {
+            var token = $.cookie("token")
+            var id = document.getElementById("id").value;
+            var str = {"id":id};
+            var url = "/admin/api/comment/delete/"+id;
+            console.log(str)
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data : JSON.stringify(str),
+                dataType : 'json',
+                contentType : 'application/json',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("token", token);
+                },
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+
+            })
+        })
+    })
 </script>
 
 <script>

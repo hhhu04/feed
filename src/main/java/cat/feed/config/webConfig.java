@@ -48,7 +48,8 @@ public class webConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/**").authenticated()
                 .antMatchers("/feed/delete").authenticated()
                 .antMatchers("/comment/new").authenticated()
-                .antMatchers("/admin/api/**").hasRole("ADMIN")
+                .antMatchers("/admin/api/**").hasAnyRole("ADMIN","MASTER")
+                .antMatchers("/admin/master/**").hasRole("MASTER")
                 .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(tokenProvider),
