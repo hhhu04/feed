@@ -16,9 +16,27 @@
 </header>
 <div class="base">
     <table class="feedTable" id="feedTable">
-
+        <caption><button id="newAdmin">관리자 생성</button><button id="delAdmin">관리자 제거</button></caption>
     </table>
 </div>
+
+<script>
+    $(function(){
+
+        $('#newAdmin').on('click', function(e) {
+            location.href="/admin/new";
+        })
+    });
+</script>
+
+<script>
+    $(function(){
+
+        $('#delAdmin').on('click', function(e) {
+            location.href="/admin/del";
+        })
+    });
+</script>
 
 
 <script th:inline="javascript">
