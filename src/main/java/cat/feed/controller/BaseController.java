@@ -33,7 +33,6 @@ public class BaseController {
     @Value("${test.url}")
     private  String url;
 
-//    private String paths = "/home/cat/web/test/";
     private String paths = "/usr/local/down/";
 
     @GetMapping("/")

@@ -1,5 +1,6 @@
 package cat.feed.service;
 
+import cat.feed.oauth.GoogleOauth;
 import cat.feed.oauth.KakaoOauth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,11 +15,11 @@ public class OauthService {
 
     private final HttpServletResponse response;
     private final KakaoOauth kakaoOauth;
-    private final KakaoOauth googleOauth;
+    private final GoogleOauth googleOauth;
 
     public void request(String socialLoginType,String url) {
         String redirectURL;
-        if (socialLoginType.equals("google")) redirectURL = googleOauth.getOauthRedirectURL(url);
+        if (socialLoginType.equals("google")) redirectURL = googleOauth.getOauthRedirectURL();
         else redirectURL = kakaoOauth.getOauthRedirectURL(url);
         try {
             response.sendRedirect(redirectURL);
@@ -29,7 +30,7 @@ public class OauthService {
 
     public String requestAccessToken(String socialLoginType, String code,String url) {
 
-        if (socialLoginType.equals("google")) return googleOauth.requestAccessToken(code,url);
+        if (socialLoginType.equals("google")) return googleOauth.requestAccessToken(code);
         else {
             return kakaoOauth.requestAccessToken(code,url);
         }

@@ -117,7 +117,8 @@ public class UserController {
             response.addCookie(cookie);
             return "<script>alert('로그인');  window.location = 'http://"+url+":8080/'</script>";
         } else {
-            Cookie cookie = new Cookie("email",email);
+            String emails = "hhhu04@gmail.com";
+            Cookie cookie = new Cookie("email",emails);
             cookie.setPath("/");
             cookie.setMaxAge(30*60);
             response.addCookie(cookie);
