@@ -33,7 +33,6 @@ public class BaseController {
     @Value("${test.url}")
     private  String url;
 
-//    private String paths = "/home/cat/web/test/";
     private String paths = "/usr/local/down/";
 
     @GetMapping("/")
@@ -195,6 +194,23 @@ public class BaseController {
 
         }catch (Exception e){
             return new ResponseEntity<Object>(null,HttpStatus.CONFLICT);
+        }
+    }
+
+
+// 연습용~~~~~~~~~~~~~~~`
+
+    @GetMapping("/sample")
+    public String sample(Model model,@CookieValue(value="token", required=false) Cookie cookie){
+        try{
+            String token = cookie.getValue();
+            String user = jwtTokenProvider.getUserPk(token);
+            String nickName = userService.nickName(user);
+            model.addAttribute("user",nickName+"님 환영합니다.");
+            return "sample/sample";
+        }catch (Exception e){
+            model.addAttribute("user","게스트");
+            return "main";
         }
     }
 
