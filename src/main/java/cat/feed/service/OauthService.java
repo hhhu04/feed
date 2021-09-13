@@ -2,6 +2,7 @@ package cat.feed.service;
 
 import cat.feed.oauth.GoogleOauth;
 import cat.feed.oauth.KakaoOauth;
+import cat.feed.oauth.NaverOauth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +17,12 @@ public class OauthService {
     private final HttpServletResponse response;
     private final KakaoOauth kakaoOauth;
     private final GoogleOauth googleOauth;
+    private final NaverOauth naverOauth;
 
     public void request(String socialLoginType,String url) {
         String redirectURL;
         if (socialLoginType.equals("google")) redirectURL = googleOauth.getOauthRedirectURL();
+        else if(socialLoginType.equals("naver")) redirectURL = naverOauth.getOauthRedirectURL(url);
         else redirectURL = kakaoOauth.getOauthRedirectURL(url);
         try {
             response.sendRedirect(redirectURL);
@@ -31,6 +34,7 @@ public class OauthService {
     public String requestAccessToken(String socialLoginType, String code,String url) {
 
         if (socialLoginType.equals("google")) return googleOauth.requestAccessToken(code);
+        else if(socialLoginType.equals("naver")) return naverOauth.requestAccessToken(code,url);
         else {
             return kakaoOauth.requestAccessToken(code,url);
         }
