@@ -18,11 +18,20 @@
 <form id="act" action="/kakao/login" method="get">
     <p><button class="kakao" type="submit"><img src="/imgs/kakao.png"> </button></p>
 </form>
+
+    <form id="act2" action="/naver/login" method="get">
+        <p><button class="naver" type="submit"><img src="#"> </button></p>
+    </form>
 </div>
 
 <script th:inline="javascript">
     var host = [[${@environment.getProperty('test.url')}]];
     $("#act").attr("action", "http://"+host+":8080/kakao/login");
+</script>
+
+<script th:inline="javascript">
+    var host = [[${@environment.getProperty('test.url')}]];
+    $("#act2").attr("action", "http://"+host+":8080/naver/login");
 </script>
 
 <script>
