@@ -63,6 +63,13 @@ public class User implements UserDetails{
         return user;
     }
 
+    public User naverJoin(User user){
+        user.setRoles("ROLE_USER");
+        user.setCreatedAt(LocalDateTime.now());
+        user.setType("naver");
+        return user;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         ArrayList<GrantedAuthority> auth = new ArrayList<>();

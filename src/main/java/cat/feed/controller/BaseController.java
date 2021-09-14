@@ -99,9 +99,10 @@ public class BaseController {
         return "join";
     }
 
-    @GetMapping("/kakao/join")
-    public String kakaoJoin(){
-        return "kakaoJoin";
+    @GetMapping("/{socialLoginType}/join")
+    public String socialJoin(@PathVariable(name = "socialLoginType") String socialLoginType){
+        if(socialLoginType.equals("naver")) return "naverJoin";
+        else return "kakaoJoin";
     }
 
 

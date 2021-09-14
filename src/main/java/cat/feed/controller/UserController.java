@@ -44,13 +44,15 @@ public class UserController {
         else return -1;
     }
 
-    @PostMapping("/user/join/kakao")
+    @PostMapping("/user/join/{socialLoginType}")
     @ResponseBody
-    public int kakaoJoin(@RequestBody User user){
+    public int socialJoin(@RequestBody User user,@PathVariable(name = "socialLoginType") String socialLoginType){
 
         if(!userService.checkUser(user)) {
             try {
-                userService.kakaoJoin(user);
+                if(socialLoginType.equals("kakao")) userService.kakaoJoin(user);
+                else if(socialLoginType.equals("naver")) userService.naverJoin(user);
+                else return -2;
                 return 1;
             }catch (Exception e){
                 return -2;
@@ -100,6 +102,7 @@ public class UserController {
     @GetMapping(value = "/{socialLoginType}/login")
     public void socialLoginType(
             @PathVariable(name = "socialLoginType") String socialLoginType) {
+        System.out.println(socialLoginType);
         oauthService.request(socialLoginType,url);
     }
 
@@ -117,12 +120,11 @@ public class UserController {
             response.addCookie(cookie);
             return "<script>alert('로그인');  window.location = 'http://"+url+":8080/'</script>";
         } else {
-            String emails = "hhhu04@gmail.com";
-            Cookie cookie = new Cookie("email",emails);
+            Cookie cookie = new Cookie("email",email);
             cookie.setPath("/");
             cookie.setMaxAge(30*60);
             response.addCookie(cookie);
-            return "<script>alert('가입진행. '); window.location = 'http://"+url+":8080/kakao/join'</script>";
+            return "<script>alert('가입진행. '); window.location = 'http://"+url+":8080/"+socialLoginType+"/join'</script>";
         }
     }
 

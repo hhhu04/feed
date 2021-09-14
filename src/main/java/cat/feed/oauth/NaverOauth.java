@@ -8,7 +8,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -16,11 +15,11 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class NaverOauth {
-    private final String KAKAO_SNS_BASE_URL = "https://nid.naver.com/oauth2.0/authorize";
-    private final String KAKAO_SNS_CLIENT_ID = "T1Zt7FTzi7EtAJw5pAZY";
+    private final String NAVER_SNS_BASE_URL = "https://nid.naver.com/oauth2.0/authorize";
+    private final String NAVER_SNS_CLIENT_ID = "T1Zt7FTzi7EtAJw5pAZY";
 
-    private final String KAKAO_SNS_TOKEN_BASE_URL = "https://nid.naver.com/oauth2.0/token";
-    private final String KAKAO_SNS_CLIENT_SECRET = "EKG2lRBlEQ";
+    private final String NAVER_SNS_TOKEN_BASE_URL = "https://nid.naver.com/oauth2.0/token";
+    private final String NAVER_SNS_CLIENT_SECRET = "EKG2lRBlEQ";
     private String to;
     private final String state = "123".toString();
 
@@ -30,14 +29,14 @@ public class NaverOauth {
 
         Map<String, Object> params = new HashMap<>();
         params.put("response_type", "code");
-        params.put("client_id", KAKAO_SNS_CLIENT_ID);
+        params.put("client_id", NAVER_SNS_CLIENT_ID);
         params.put("redirect_uri", KAKAO_SNS_CALLBACK_URL);
         params.put("state",state);
         String parameterString = params.entrySet().stream()
                 .map(x -> x.getKey() + "=" + x.getValue())
                 .collect(Collectors.joining("&"));
 
-        return KAKAO_SNS_BASE_URL + "?" + parameterString;
+        return NAVER_SNS_BASE_URL + "?" + parameterString;
     }
 
     public String requestAccessToken(String code,String host) {
@@ -46,14 +45,14 @@ public class NaverOauth {
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
-        params.add("client_id", KAKAO_SNS_CLIENT_ID);
-        params.add("client_secret", KAKAO_SNS_CLIENT_SECRET);
+        params.add("client_id", NAVER_SNS_CLIENT_ID);
+        params.add("client_secret", NAVER_SNS_CLIENT_SECRET);
         params.add("redirect_uri", KAKAO_SNS_CALLBACK_URL);
         params.add("code", code);
         params.add("state",state);
 
         ResponseEntity<String> responseEntity =
-                restTemplate.postForEntity(KAKAO_SNS_TOKEN_BASE_URL, params, String.class);
+                restTemplate.postForEntity(NAVER_SNS_TOKEN_BASE_URL, params, String.class);
 
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             ObjectMapper om = new ObjectMapper();
@@ -112,6 +111,7 @@ public class NaverOauth {
 
         System.out.println(name2);
         //      8HQlSq_WEcXALSCZXjmH1tVSgeZpt-zf4Ia_WfYfShI
+//              8HQlSq_WEcXALSCZXjmH1tVSgeZpt-zf4Ia_WfYfShI
         return name2;
     }
 }
