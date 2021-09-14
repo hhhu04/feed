@@ -55,6 +55,11 @@ public class UserService  {
         userRepository.save(user);
     }
 
+    public void naverJoin(User user) {
+        user = user.naverJoin(user);
+        userRepository.save(user);
+    }
+
     public String nickName(String user) {
         return userRepository.findByUserId(user).get().getNickName();
     }
@@ -94,4 +99,6 @@ public class UserService  {
         user = userRepository.findByUserId(user.getUserId()).get();
         userRepository.delete(user);
     }
+
+
 }
