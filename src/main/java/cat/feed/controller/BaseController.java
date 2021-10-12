@@ -107,6 +107,7 @@ public class BaseController {
 
 
 
+
     @GetMapping("/logout/kakao")
     public String logoutKakao(HttpServletResponse response, @CookieValue(value="token", required=false) Cookie cookies){
         try {

@@ -13,9 +13,12 @@
 <form id="logoutForm" method="post">
     <p><input type="button" value="로그아웃" id="add"><input type="button" value="취소" id="back"></p>
 </form>
-<form id="kaForm" action="http://localhost:8080/out/kakao" method="get">
+<form id="kaForm" action="/out/kakao" method="get">
     <input type="submit" value="카카오계정 로그아웃" id="add2">
 </form>
+    <form id="naForm" action="/out/naver" method="get">
+        <input type="submit" value="네이버계정 로그아웃" id="add3">
+    </form>
 </div>
 <script>
     jQuery('#kaForm').submit(
@@ -23,6 +26,7 @@
             $.removeCookie("token");
         }
     )
+
 </script>
 
 <script>
@@ -62,6 +66,8 @@
         });
     });
 </script>
+
+
 
 <footer><hr></footer>
 </body>

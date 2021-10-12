@@ -3,12 +3,16 @@ package cat.feed.service;
 import cat.feed.oauth.GoogleOauth;
 import cat.feed.oauth.KakaoOauth;
 import cat.feed.oauth.NaverOauth;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -49,5 +53,17 @@ public class OauthService {
             e.printStackTrace();
         }
 //        kakaoOauth.logout();
+    }
+
+    public String naverLogout(String token) {
+        String url="https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=T1Zt7FTzi7EtAJw5pAZY&client_secret=EKG2lRBlEQ&access_token="+token+"&service_provider=NAVER";
+        RestTemplate template = new RestTemplate();
+        ResponseEntity<?> re = template.getForEntity(url, Map.class);
+        Map<String,String> result = (Map<String, String>) re.getBody();
+        if(result.get("result").equals("success")){
+           return result.get("result");
+        }
+        else return "no";
+
     }
 }

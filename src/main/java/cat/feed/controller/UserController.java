@@ -95,8 +95,24 @@ public class UserController {
     }
 
     @GetMapping("/out/kakao")
-    public void logoutKakao(){
+    public void logoutKakao(HttpServletResponse response){
         oauthService.kakaoLogout();
+    }
+
+    @GetMapping("/out/naver")
+    public String logoutnaver(@CookieValue(value="token", required=false) Cookie cookie,HttpServletResponse response){
+        String token = cookie.getValue();
+        String result = oauthService.naverLogout(token);
+        if(result.equals("no")){
+            return "logout";
+        }
+        else {
+            Cookie cookies = new Cookie("token", "123");
+            cookies.setPath("/");
+            cookies.setMaxAge(0);
+            response.addCookie(cookies);
+            return "<script>window.location = '/'</script>";
+        }
     }
 
     @GetMapping(value = "/{socialLoginType}/login")
