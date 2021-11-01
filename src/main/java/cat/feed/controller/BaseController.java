@@ -33,7 +33,7 @@ public class BaseController {
     @Value("${test.url}")
     private  String url;
 
-    private String paths = "/usr/local/down/";
+    private String paths = "/img/";
 
     @GetMapping("/")
     public String main(Model model,@CookieValue(value="token", required=false) Cookie cookie){
