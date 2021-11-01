@@ -4,7 +4,8 @@ test:
 #  url: 192.168.93.129
   url: 49.50.175.113
 #  path: /home/cat/web/test/img
-  path: /usr/local/img
+#  path: /usr/local/img
+  path: /img
 
 
 
