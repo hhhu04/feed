@@ -6,7 +6,7 @@ plugins {
 
 group = 'cat'
 version = '0.1'
-sourceCompatibility = '11'
+sourceCompatibility = '8'
 
 configurations {
     compileOnly {
