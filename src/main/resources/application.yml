@@ -1,8 +1,8 @@
 test:
-  url: localhost
+#  url: localhost
 #  url: 118.67.133.148
 #  url: 192.168.93.129
-#  url: 49.50.175.113
+  url: 49.50.175.113
 #  path: /home/cat/web/test/img
 #  path: /usr/local/img
   path: /img
@@ -11,8 +11,8 @@ test:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/feed?sueSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
-#    url: jdbc:mysql://118.67.133.148:3306/feed?sueSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+#    url: jdbc:mysql://localhost:3306/feed?sueSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://118.67.133.148:3306/feed?sueSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
     password: 12345678
     username: sample
   jpa:
