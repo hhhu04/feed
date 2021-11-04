@@ -41,6 +41,8 @@ public class User implements UserDetails{
 
     private String type;
 
+    private long boxId;
+
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private List<Feed> feeds = new ArrayList<>();
@@ -55,7 +57,7 @@ public class User implements UserDetails{
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
-    private List<Box> boxs = new ArrayList<>();
+    private List<Box> boxes = new ArrayList<>();
 
 
     ///////////////////////////////////////////////////////
@@ -79,6 +81,13 @@ public class User implements UserDetails{
         user.setCreatedAt(LocalDateTime.now());
         user.setType("naver");
         return user;
+    }
+
+    public String createBox(long boxId,String userId){
+
+
+
+        return null;
     }
 
     @Override

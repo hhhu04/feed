@@ -6,21 +6,30 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
-//@Entity
-//@Data
-//@AllArgsConstructor
-//@NoArgsConstructor
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Box {
 
-//    @Id
-//    @GeneratedValue
-//    private long id;
-//
-//    private long userId;
+    /*
+    유저 가입시 하나의 파일을 생성(장바구니) 그 주소를 저장
+    파일 구성은 item 의  id,수량 \n
+    유저가 각자의 box id를 소유
+     */
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "itemId")
-//    private Item item;
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    private long userId;
+
+    private String test;
+
+
 
 }
