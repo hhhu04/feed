@@ -30,6 +30,7 @@ public class UserService  {
     public void userJoin(User user) throws Exception{
         user = user.userJoin(user,passwordEncoder);
         userRepository.save(user);
+
     }
 
 
@@ -50,12 +51,12 @@ public class UserService  {
         return jwtTokenProvider.createToken(user.getUserId(), user.getRoles());
     }
 
-    public void kakaoJoin(User user) {
+    public void kakaoJoin(User user) throws Exception {
         user = user.kakaoJoin(user);
         userRepository.save(user);
     }
 
-    public void naverJoin(User user) {
+    public void naverJoin(User user) throws Exception {
         user = user.naverJoin(user);
         userRepository.save(user);
     }

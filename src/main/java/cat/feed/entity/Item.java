@@ -21,9 +21,13 @@ public class Item {
 
     private long userId;
 
+    private String nickName;
+
     private String name;
 
     private int total;
+
+    private String img;
 
     private LocalDateTime createdAt;
 

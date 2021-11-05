@@ -21,7 +21,7 @@ class ItemRepositoryTest {
         item.setCreatedAt(LocalDateTime.now());
         item.setTotal(50);
         item.setUserId(32);
-        item.setName("사과");
+        item.setName("배");
         itemRepository.save(item);
     }
 
