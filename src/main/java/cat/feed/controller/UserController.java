@@ -5,16 +5,12 @@ import cat.feed.jwt.JwtTokenProvider;
 import cat.feed.service.OauthService;
 import cat.feed.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 
 @RestController
@@ -24,10 +20,17 @@ public class UserController {
     private final UserService userService;
     private final OauthService oauthService;
     private final JwtTokenProvider jwtTokenProvider;
+
     @Value("${test.url}")
     private  String url;
 
+    private String paths = "/img/";
+
+
     // 1:성공 -1:아디중복 -2:아디없음 -3그 밖의 에러
+
+
+
 
     @PostMapping("/user/join")
     @ResponseBody
@@ -53,6 +56,7 @@ public class UserController {
                 if(socialLoginType.equals("kakao")) userService.kakaoJoin(user);
                 else if(socialLoginType.equals("naver")) userService.naverJoin(user);
                 else return -2;
+
                 return 1;
             }catch (Exception e){
                 return -2;
@@ -181,7 +185,7 @@ public class UserController {
 
 
 
-    ///admin
+
 
 
 
