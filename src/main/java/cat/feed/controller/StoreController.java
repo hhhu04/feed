@@ -65,6 +65,10 @@ public class StoreController {
     }
 
 
+    @GetMapping("/myBasket")
+    public String myBasket(Model model){
+        return "store/myBox";
+    }
 
 
 
