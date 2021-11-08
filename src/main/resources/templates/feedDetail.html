@@ -17,7 +17,12 @@
 
     <h2>게시글 상세보기</h2>
     <table class="feedTable" border="1">
-        <caption><button th:if="${role} == 'ROLE_ADMIN'" id="adminDelete"> 관리자 삭제 </button><button th:if="${id}==${feed.getUserId()}" id="action"> 수정 </button><button th:if="${id}==${feed.getUserId()}" id="delete"> 삭제 </button><button onclick="history.back()"> 뒤로 </button></caption>
+        <caption>
+            <button th:if="${role} == 'ROLE_ADMIN'" id="adminDelete"> 관리자 삭제 </button>
+            <button th:if="${id}==${feed.getUserId()}" id="action"> 수정 </button>
+            <button th:if="${id}==${feed.getUserId()}" id="delete"> 삭제 </button>
+            <button onclick="history.back()"> 뒤로 </button>
+        </caption>
         <tr>
             <td>제목</td>
             <td colspan="2"><span th:text="${feed.getTitle()}"></span></td>

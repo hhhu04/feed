@@ -25,6 +25,11 @@
             <p th:text="${item.getName()}"></p>
             <p th:text="${item.getNickName()}"></p>
             <p th:text="${item.getTotal()}"></p>
+            <p><button id="basket"> 장바구니 담기 </button></p>
+            <p><button th:if="${role} == 'ROLE_ADMIN'" id="adminDelete"> 관리자 삭제 </button>
+                <button th:if="${id}==${item.getUserId()}" id="action"> 수정 </button>
+                <button th:if="${id}==${item.getUserId()}" id="delete"> 삭제 </button>
+                <button onclick="history.back()"> 뒤로 </button></p>
         </div>
 
     </div>
@@ -35,6 +40,9 @@
 </div>
 
 
+<scripts>
+
+</scripts>
 
 
 
