@@ -1,7 +1,5 @@
 test:
 #  url: localhost
-#  url: 118.67.133.148
-#  url: 192.168.93.129
   url: 49.50.175.113
 #  path: /home/cat/web/test/img
 #  path: /usr/local/img

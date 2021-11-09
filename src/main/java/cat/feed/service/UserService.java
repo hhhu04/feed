@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -101,5 +102,10 @@ public class UserService  {
         userRepository.delete(user);
     }
 
+//장바구니에 물품 추가
+    public void insertBox(String userId, Long id,User user) throws IOException {
+        user = userRepository.findUserByUserId(userId);
+        user.readBox(user,id);
 
+    }
 }

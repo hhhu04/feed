@@ -41,6 +41,7 @@ public class UserController {
                 userService.userJoin(user);
                 return 1;
             }catch (Exception e){
+                e.printStackTrace();
                 return -2;
             }
         }

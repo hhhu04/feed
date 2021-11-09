@@ -22,9 +22,9 @@
             <img class="imgDetail" th:src="${item.getImg()}">
         </div>
         <div class="item">
-            <p th:text="${item.getName()}"></p>
-            <p th:text="${item.getNickName()}"></p>
-            <p th:text="${item.getTotal()}"></p>
+            <p>상품명 :<span th:text="${item.getName()}"></span></p>
+            <p>등록자 : <span th:text="${item.getNickName()}"></span></p>
+            <p>수량  :<span th:text="${item.getTotal()}"></span></p>
             <p><button id="basket"> 장바구니 담기 </button></p>
             <p><button th:if="${role} == 'ROLE_ADMIN'" id="adminDelete"> 관리자 삭제 </button>
                 <button th:if="${id}==${item.getUserId()}" id="action"> 수정 </button>
@@ -40,12 +40,38 @@
 </div>
 
 
-<scripts>
+<script th:onclick="javascript">
+    $(function(){
 
-</scripts>
+        $('#basket').on('click', function(e) {
+            var token = $.cookie("token");
+            console.log(token);
+            var id = [[${item.getId}]]
+            var str = {"id":id}
+            console.log(str);
+
+            $.ajax({
+                url:'/store/insertBox',
+                type: 'POST',
+                data : JSON.stringify(str),
+                dataType : 'json',
+                contentType : 'application/json',
+                beforeSend : function(xhr) {
+                xhr.setRequestHeader("token",token);
+                },
+                success : function(data) {
+
+                },
+                error:function(data){
+                    console.log(data);
+                }
+            });
+        });
+    });
+    </script>
 
 
 
-
+<footer><hr></footer>
 </body>
 </html>
