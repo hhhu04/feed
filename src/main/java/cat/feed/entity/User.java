@@ -1,23 +1,17 @@
 package cat.feed.entity;
 
 import lombok.*;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -95,7 +89,7 @@ public class User implements UserDetails{
     }
 
     public String createBox(User user) throws Exception {
-        String paths = "/img/basket";
+        String paths = "/img/basket"+userId+".txt";
 //        String paths = "/home/cat/Desktop/basket/"+userId+".txt";
         OutputStream outputStream = new FileOutputStream(paths);
         outputStream.close();
@@ -104,6 +98,46 @@ public class User implements UserDetails{
         return null;
     }
 
+    public void readBox(User user, long itemId) throws IOException {
+        String paths = "/img/basket"+user.getUserId()+".txt";
+//        String paths = "/home/cat/Desktop/basket/"+user.getUserId()+".txt";
+        BufferedReader read = new BufferedReader(new FileReader(paths));
+        ArrayList<Long> arr = new ArrayList<>();
+
+
+        while(true){
+            String temp = read.readLine();
+            System.out.println(temp);
+            if(temp == null) break;
+            long id = Long.parseLong(temp);
+            arr.add(id);
+        }
+        arr.add(itemId);
+
+        writeBox(user,arr);
+
+    }
+
+
+    public void writeBox(User user,ArrayList<Long> arr) throws IOException {
+//        String paths = "/img/basket"+user.getUserId()+".txt";
+        String paths = "/home/cat/Desktop/basket/"+user.getUserId()+".txt";
+
+        BufferedWriter write = new BufferedWriter(new FileWriter(paths));
+
+        for(long i:arr){
+            write.write(i+"\n");
+        }
+        write.flush();
+        write.close();
+
+
+    }
+
+
+
+
+    ////JWT관련
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         ArrayList<GrantedAuthority> auth = new ArrayList<>();

@@ -98,7 +98,9 @@ public class StoreController {
             String token = cookies.getValue();
             String id = jwtTokenProvider.getUserPk(token);
             String nickName = userService.nickName(id);
+            long userKeyId = userService.id(id);
 
+            item.setUserId(userKeyId);
             item.setName(title);
             item.setNickName(nickName);
             item.setTotal(total);
@@ -117,6 +119,25 @@ public class StoreController {
 
 
 
+    @PostMapping("/store/insertBox")
+    @ResponseBody
+    public int insert(@CookieValue(value = "token", required = false) Cookie cookies, @RequestBody Item item){
+
+        try{
+            User user = new User();
+            String token = cookies.getValue();
+            String userId = jwtTokenProvider.getUserPk(token);
+            item = itemService.insertBox(userId, item);
+            userService.insertBox(userId,item.getId(),user);
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+        return 1;
+    }
 
 
 }

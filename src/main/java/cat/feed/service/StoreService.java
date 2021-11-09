@@ -36,4 +36,8 @@ public class StoreService {
         itemRepository.save(item);
         return 1;
     }
+
+    public Item insertBox(String userId, Item item) throws Exception{
+        return itemRepository.findItemById(item.getId());
+    }
 }
