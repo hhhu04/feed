@@ -99,7 +99,7 @@ public class User implements UserDetails{
     }
 
     public void readBox(User user, long itemId) throws IOException {
-        String paths = "/img/basket"+user.getUserId()+".txt";
+        String paths = "/img/basket/"+user.getUserId()+".txt";
 //        String paths = "/home/cat/Desktop/basket/"+user.getUserId()+".txt";
         BufferedReader read = new BufferedReader(new FileReader(paths));
         ArrayList<Long> arr = new ArrayList<>();
@@ -118,7 +118,7 @@ public class User implements UserDetails{
     }
 
     public List<Long> myBox(User user) throws IOException {
-        String paths = "/img/basket"+user.getUserId()+".txt";
+        String paths = "/img/basket/"+user.getUserId()+".txt";
 //        String paths = "/home/cat/Desktop/basket/"+user.getUserId()+".txt";
         BufferedReader read = new BufferedReader(new FileReader(paths));
         ArrayList<Long> arr = new ArrayList<>();
@@ -136,7 +136,7 @@ public class User implements UserDetails{
 
 
     public void writeBox(User user,ArrayList<Long> arr) throws IOException {
-        String paths = "/img/basket"+user.getUserId()+".txt";
+        String paths = "/img/basket/"+user.getUserId()+".txt";
 //        String paths = "/home/cat/Desktop/basket/"+user.getUserId()+".txt";
 
         BufferedWriter write = new BufferedWriter(new FileWriter(paths));
