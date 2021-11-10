@@ -1,17 +1,20 @@
 package cat.feed.controller;
 
+import cat.feed.entity.Item;
 import cat.feed.entity.User;
 import cat.feed.jwt.JwtTokenProvider;
 import cat.feed.service.OauthService;
 import cat.feed.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -184,6 +187,14 @@ public class UserController {
         return 1;
     }
 
+
+    @PostMapping("/user/myBasket")
+    public List<Item> myBasket(@CookieValue(value="token", required=false) Cookie cookie){
+
+
+
+        return null;
+    }
 
 
 

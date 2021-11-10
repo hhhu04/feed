@@ -1,6 +1,7 @@
 package cat.feed.service;
 
 import cat.feed.dto.AllDto;
+import cat.feed.entity.Item;
 import cat.feed.entity.User;
 import cat.feed.jwt.JwtTokenProvider;
 import cat.feed.repository.UserRepository;
@@ -10,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -108,4 +111,7 @@ public class UserService  {
         user.readBox(user,id);
 
     }
+
+
+
 }

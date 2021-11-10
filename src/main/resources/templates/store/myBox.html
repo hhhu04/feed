@@ -9,6 +9,25 @@
     <title>장바구니</title>
 </head>
 <body>
-장바구니
+<header>
+    <p class="mainHeader"><button onclick="location.href='/'">홈</button><button onclick="location.href='/login'">로그아웃</button></p>
+</header>
+    <div class="base">
+        <h2>장바구니</h2>
+
+        <ul class="uls" th:each="items : ${item}">
+            <li>
+            <p>품명 : <span th:text="${items.name}" ></span> </p>
+            <p>가격 :<span th:text="${items.price}"></span> </p>
+            </li>
+        </ul>
+
+    </div>
+
+
+
+
+<footer><hr></footer>
+
 </body>
 </html>
