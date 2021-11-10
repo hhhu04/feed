@@ -2,6 +2,7 @@ package cat.feed.service;
 
 import cat.feed.entity.Feed;
 import cat.feed.entity.Item;
+import cat.feed.entity.User;
 import cat.feed.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,5 +41,14 @@ public class StoreService {
 
     public Item insertBox(String userId, Item item) throws Exception{
         return itemRepository.findItemById(item.getId());
+    }
+
+    public List<Item> myBox(List<Item> item, User user) throws IOException {
+        System.out.println("!23");
+        List<Long> arr = new ArrayList<>();
+        arr = user.myBox(user);
+        item = itemRepository.findAllById(arr);
+
+        return item;
     }
 }

@@ -24,6 +24,7 @@
         <div class="item">
             <p>상품명 :<span th:text="${item.getName()}"></span></p>
             <p>등록자 : <span th:text="${item.getNickName()}"></span></p>
+            <p>가격  :<span th:text="${item.getPrice()}"></span></p>
             <p>수량  :<span th:text="${item.getTotal()}"></span></p>
             <p><button id="basket"> 장바구니 담기 </button></p>
             <p><button th:if="${role} == 'ROLE_ADMIN'" id="adminDelete"> 관리자 삭제 </button>
@@ -60,7 +61,7 @@
                 xhr.setRequestHeader("token",token);
                 },
                 success : function(data) {
-
+                    history.back();
                 },
                 error:function(data){
                     console.log(data);

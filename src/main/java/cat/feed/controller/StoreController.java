@@ -76,7 +76,28 @@ public class StoreController {
 
 
     @GetMapping("/myBasket")
-    public String myBasket(Model model){
+    public String myBasket(Model model,@CookieValue(value = "token", required = false) Cookie cookies){
+        User user = new User();
+        List<Item> item = new ArrayList<>();
+
+        try{
+            String token = cookies.getValue();
+            String userId = jwtTokenProvider.getUserPk(token);
+
+            user.setUserId(userId);
+            user = userService.userInfo(user);
+
+            item = itemService.myBox(item,user);
+            int num = item.size();
+
+            model.addAttribute("item",item);
+            model.addAttribute("num",num);
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         return "store/myBox";
     }
 
@@ -91,6 +112,7 @@ public class StoreController {
     public int newItem(@CookieValue(value = "token", required = false) Cookie cookies,
                        @RequestParam(value = "title",required = false) String title,
                        @RequestParam(value = "number",required = false) int total,
+                       @RequestParam(value = "price",required = false) int price,
                        @RequestParam(value = "img",required = false) MultipartFile img){
 
         try{
@@ -104,6 +126,7 @@ public class StoreController {
             item.setName(title);
             item.setNickName(nickName);
             item.setTotal(total);
+            item.setPrice(price);
 
             int num = itemService.newItem(item,img,path);
 

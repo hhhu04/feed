@@ -89,8 +89,8 @@ public class User implements UserDetails{
     }
 
     public String createBox(User user) throws Exception {
-        String paths = "/img/basket"+userId+".txt";
-//        String paths = "/home/cat/Desktop/basket/"+userId+".txt";
+        String paths = "/img/basket"+user.getUserId()+".txt";
+//        String paths = "/home/cat/Desktop/basket/"+user.getUserId()+".txt";
         OutputStream outputStream = new FileOutputStream(paths);
         outputStream.close();
 
@@ -103,7 +103,6 @@ public class User implements UserDetails{
 //        String paths = "/home/cat/Desktop/basket/"+user.getUserId()+".txt";
         BufferedReader read = new BufferedReader(new FileReader(paths));
         ArrayList<Long> arr = new ArrayList<>();
-
 
         while(true){
             String temp = read.readLine();
@@ -118,10 +117,27 @@ public class User implements UserDetails{
 
     }
 
+    public List<Long> myBox(User user) throws IOException {
+        String paths = "/img/basket"+user.getUserId()+".txt";
+//        String paths = "/home/cat/Desktop/basket/"+user.getUserId()+".txt";
+        BufferedReader read = new BufferedReader(new FileReader(paths));
+        ArrayList<Long> arr = new ArrayList<>();
+
+        while(true){
+            String temp = read.readLine();
+            System.out.println(temp);
+            if(temp == null) break;
+            long id = Long.parseLong(temp);
+            arr.add(id);
+        }
+
+        return arr;
+    }
+
 
     public void writeBox(User user,ArrayList<Long> arr) throws IOException {
-//        String paths = "/img/basket"+user.getUserId()+".txt";
-        String paths = "/home/cat/Desktop/basket/"+user.getUserId()+".txt";
+        String paths = "/img/basket"+user.getUserId()+".txt";
+//        String paths = "/home/cat/Desktop/basket/"+user.getUserId()+".txt";
 
         BufferedWriter write = new BufferedWriter(new FileWriter(paths));
 

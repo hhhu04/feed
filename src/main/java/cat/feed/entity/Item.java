@@ -40,6 +40,8 @@ public class Item {
 
     private LocalDateTime updatedAt;
 
+    private int price;
+
 
 
     public Item newItem(Item item, MultipartFile img, String path) throws IOException {
