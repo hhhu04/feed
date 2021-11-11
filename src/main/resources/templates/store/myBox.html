@@ -21,13 +21,43 @@
             <p>가격 :<span th:text="${items.price}"></span> </p>
             </li>
         </ul>
+        <p><button id="buy">구매</button></p>
 
     </div>
 
 
-
-
 <footer><hr></footer>
+
+
+<script th:onclick="javascript">
+    $(function(){
+
+        $('#buy').on('click', function(e) {
+            var token = $.cookie("token");
+            console.log(token);
+            var id = [[${item.getId}]]
+            var str = {"id":id}
+            console.log(str);
+
+            // $.ajax({
+            //     url:'/store/insertBox',
+            //     type: 'POST',
+            //     data : JSON.stringify(str),
+            //     dataType : 'json',
+            //     contentType : 'application/json',
+            //     beforeSend : function(xhr) {
+            //         xhr.setRequestHeader("token",token);
+            //     },
+            //     success : function(data) {
+            //         history.back();
+            //     },
+            //     error:function(data){
+            //         console.log(data);
+            //     }
+            // });
+        });
+    });
+</script>
 
 </body>
 </html>
