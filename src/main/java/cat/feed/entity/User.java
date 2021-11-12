@@ -55,6 +55,9 @@ public class User implements UserDetails{
     @JoinColumn(name = "userId")
     private List<Item> items = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    private List<BuyLogs> buyLogs = new ArrayList<>();
 
 
 
