@@ -122,6 +122,26 @@ public class BaseController {
         }
     }
 
+    @GetMapping("/myBuyLogs")
+    public String myBuyLogs(@CookieValue(value="token", required=false) Cookie cookies){
+
+        try {
+            String token = cookies.getValue();
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return "/myLogs";
+    }
+
+
+
+
+
+    //////파일다운
+
 
     @GetMapping("/down/dogram")
     public ResponseEntity<Object> download(){

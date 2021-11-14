@@ -1,5 +1,6 @@
 package cat.feed.controller;
 
+import cat.feed.entity.BuyLogs;
 import cat.feed.entity.Item;
 import cat.feed.entity.User;
 import cat.feed.jwt.JwtTokenProvider;
@@ -188,14 +189,22 @@ public class UserController {
     }
 
 
-    @PostMapping("/user/myBasket")
-    public List<Item> myBasket(@CookieValue(value="token", required=false) Cookie cookie){
+
+    @PostMapping("/user/myLogs")
+    public List<BuyLogs> buyLogs(@CookieValue(value="token", required=false) Cookie cookie,User user){
+        try {
+            String token = cookie.getValue();
+            String userId = jwtTokenProvider.getUserPk(token);
+            user.setUserId(userId);
+            user = userService.userInfo(user);
 
 
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
-        return null;
+        return user.getBuyLogs();
     }
-
 
 
 

@@ -75,7 +75,7 @@ public class StoreController {
     }
 
 
-    @GetMapping("/myBasket")
+    @GetMapping("/user/myBasket")
     public String myBasket(Model model,@CookieValue(value = "token", required = false) Cookie cookies){
         User user = new User();
         List<Item> item = new ArrayList<>();
