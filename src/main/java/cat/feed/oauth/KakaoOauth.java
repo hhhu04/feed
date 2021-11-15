@@ -83,7 +83,6 @@ public class KakaoOauth  {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set("Authorization",token);
 
-        System.out.println(token);
 
         String url ="https://kapi.kakao.com/v2/user/me";
 

@@ -1,5 +1,6 @@
 package cat.feed.controller;
 
+import cat.feed.dto.BuyDto;
 import cat.feed.entity.Feed;
 import cat.feed.entity.Item;
 import cat.feed.entity.User;
@@ -75,7 +76,7 @@ public class StoreController {
     }
 
 
-    @GetMapping("/user/myBasket")
+    @GetMapping("/myBasket")
     public String myBasket(Model model,@CookieValue(value = "token", required = false) Cookie cookies){
         User user = new User();
         List<Item> item = new ArrayList<>();
@@ -90,8 +91,18 @@ public class StoreController {
             item = itemService.myBox(item,user);
             int num = item.size();
 
+            List<Long> buyList = new ArrayList<>();
+            int totalPrice = 0;
+
+            for(int i=0 ; i<item.size(); i++){
+                buyList.add(item.get(i).getId());
+                totalPrice = totalPrice + item.get(i).getPrice();
+            }
+
             model.addAttribute("item",item);
             model.addAttribute("num",num);
+            model.addAttribute("list",buyList);
+            model.addAttribute("totalPrice",totalPrice);
 
 
         }catch (Exception e){
@@ -160,6 +171,40 @@ public class StoreController {
 
 
         return 1;
+    }
+
+
+    @PostMapping("/store/payment")
+    @ResponseBody
+    public int payment(@CookieValue(value = "token", required = false) Cookie cookies, @RequestBody BuyDto dto){
+        try {
+            String token = cookies.getValue();
+            String userId = jwtTokenProvider.getUserPk(token);
+
+            itemService.buy(userId,dto,path);
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+        return 1;
+    }
+
+    @GetMapping("/store/ok")
+    public String ok(){
+        return "sample/ok";
+    }
+
+    @GetMapping("/store/cencel")
+    public String cencel(){
+        return "sample/cancel";
+    }
+
+    @GetMapping("/store/fail")
+    public String fail(){
+        return "sample/fail";
     }
 
 
