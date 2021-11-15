@@ -1,5 +1,6 @@
 package cat.feed.service;
 
+import cat.feed.dto.BuyDto;
 import cat.feed.entity.Feed;
 import cat.feed.entity.Item;
 import cat.feed.entity.User;
@@ -50,5 +51,10 @@ public class StoreService {
         item = itemRepository.findAllById(arr);
 
         return item;
+    }
+
+    public void buy(String userId, BuyDto dto,String path) throws Exception{
+        dto.buy(userId,dto, path);
+
     }
 }

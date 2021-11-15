@@ -69,7 +69,7 @@ public class NaverOauth {
 
             return info(map);
         }
-        return "카카오로그인 요청 처리 실패";
+        return "네이버로그인 요청 처리 실패";
     }
 
     public String info(Map<String,String> map){
