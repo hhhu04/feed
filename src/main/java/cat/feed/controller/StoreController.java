@@ -17,8 +17,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,7 +32,7 @@ public class StoreController {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
 
-    @Value("${test.path}")
+    @Value("${test.url}")
     private String path;
 
     @GetMapping("/store")
@@ -176,12 +180,28 @@ public class StoreController {
 
     @PostMapping("/store/payment")
     @ResponseBody
-    public int payment(@CookieValue(value = "token", required = false) Cookie cookies, @RequestBody BuyDto dto){
+    public List<String> payment(@CookieValue(value = "token", required = false) Cookie cookies, @RequestBody BuyDto dto, HttpServletResponse response,
+                                HttpSession session){
+        List<String> list = new ArrayList<>();
         try {
             String token = cookies.getValue();
             String userId = jwtTokenProvider.getUserPk(token);
 
-            itemService.buy(userId,dto,path);
+//            String reUrl = itemService.buy(userId,dto,path);
+//            list.add(reUrl);
+
+            list = itemService.buy(userId,dto,path);
+            String tradeNumber = list.get(1);
+            list.remove(1);
+
+            String tid = list.get(1);
+            list.remove(1);
+
+            session.setAttribute("trade",tradeNumber);
+
+            session.setAttribute("tid",tid);
+
+            return list;
 
 
         }catch (Exception e){
@@ -189,11 +209,30 @@ public class StoreController {
         }
 
 
-        return 1;
+        return list;
     }
 
     @GetMapping("/store/ok")
-    public String ok(){
+    public String ok(@CookieValue(value = "token", required = false) Cookie cookies, BuyDto dto,
+                     @RequestParam String pg_token, Model model,HttpSession session){
+
+        Map<String, String> map = new HashMap<>();
+
+        try{
+
+            String token = cookies.getValue();
+            String userId = jwtTokenProvider.getUserPk(token);
+            String tradeNumber = (String) session.getAttribute("trade");
+            String tids = (String) session.getAttribute("tid");
+
+            map = itemService.buySuccess(userId,tradeNumber,dto, tids,pg_token);
+            model.addAttribute("map",map);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
         return "sample/ok";
     }
 

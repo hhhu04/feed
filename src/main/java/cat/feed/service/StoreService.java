@@ -13,7 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -53,8 +55,16 @@ public class StoreService {
         return item;
     }
 
-    public void buy(String userId, BuyDto dto,String path) throws Exception{
-        dto.buy(userId,dto, path);
+    public List<String> buy(String userId, BuyDto dto,String path) throws Exception{
+        return dto.buy(userId,dto, path);
+
+    }
+
+    public Map<String, String> buySuccess(String userId, String tradeNumber, BuyDto dto,String tid, String pg_token) {
+        Map<String, String> map = new HashMap<>();
+
+        map = dto.buySuccess(userId,tradeNumber,dto, tid,pg_token);
+        return map;
 
     }
 }
