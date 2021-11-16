@@ -53,11 +53,16 @@
                     xhr.setRequestHeader("token",token);
                 },
                 success : function(data) {
-                    console.log("success")
-                    history.back();
+                    if(data !== "fail"){
+                        window.open(data)
+                    }
+                    else {
+                        alert("오류");
+                    }
                 },
                 error:function(data){
                     console.log(data);
+
                 }
             });
         });
