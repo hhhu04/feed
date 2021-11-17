@@ -1,10 +1,12 @@
 package cat.feed.controller;
 
 import cat.feed.dto.BuyDto;
+import cat.feed.entity.BuyLogs;
 import cat.feed.entity.Feed;
 import cat.feed.entity.Item;
 import cat.feed.entity.User;
 import cat.feed.jwt.JwtTokenProvider;
+import cat.feed.service.BuyLogService;
 import cat.feed.service.StoreService;
 import cat.feed.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,7 @@ public class StoreController {
     private final StoreService itemService;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
+    private final BuyLogService buyLogService;
 
     @Value("${test.url}")
     private String path;
@@ -187,9 +190,6 @@ public class StoreController {
             String token = cookies.getValue();
             String userId = jwtTokenProvider.getUserPk(token);
 
-//            String reUrl = itemService.buy(userId,dto,path);
-//            list.add(reUrl);
-
             list = itemService.buy(userId,dto,path);
             String tradeNumber = list.get(1);
             list.remove(1);
@@ -200,6 +200,8 @@ public class StoreController {
             session.setAttribute("trade",tradeNumber);
 
             session.setAttribute("tid",tid);
+
+            session.setAttribute("dto",dto);
 
             return list;
 
@@ -224,9 +226,24 @@ public class StoreController {
             String userId = jwtTokenProvider.getUserPk(token);
             String tradeNumber = (String) session.getAttribute("trade");
             String tids = (String) session.getAttribute("tid");
+            dto = (BuyDto) session.getAttribute("dto");
+
+            session.invalidate();
 
             map = itemService.buySuccess(userId,tradeNumber,dto, tids,pg_token);
             model.addAttribute("map",map);
+
+            User user = new User();
+            BuyLogs buyLogs = new BuyLogs();
+            List<Item> items = new ArrayList<>();
+            List<String> itemNames = new ArrayList<>();
+
+            user = userService.boxReload(userId);
+            items = itemService.idToName(dto,items);
+            itemNames = dto.idToName(items,itemNames);
+
+            buyLogService.save(map,itemNames,user,buyLogs);
+
 
         }catch (Exception e){
             e.printStackTrace();

@@ -10,6 +10,13 @@
 </head>
 <body>
 ok
-<span th:text="${map}"></span>
+
+<script th:inline="javascript">
+        var result = [[${map}]];
+        window.opener.result(result);
+        window.close()
+</script>
+
+
 </body>
 </html>

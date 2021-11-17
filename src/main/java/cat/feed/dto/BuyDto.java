@@ -1,5 +1,6 @@
 package cat.feed.dto;
 
+import cat.feed.entity.Item;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.springframework.http.HttpEntity;
@@ -28,7 +29,7 @@ public class BuyDto {
         String admin = "23b3eeb10257d6952a5b9531776274de";
         path ="http://"+  path + ":8080";
 
-        String tradeNumber = Integer.toString(LocalDateTime.now().getYear())+Integer.toString(LocalDateTime.now().getMonthValue())+
+        String tradeNumber =Integer.toString(LocalDateTime.now().getYear())+Integer.toString(LocalDateTime.now().getMonthValue())+
                 Integer.toString(LocalDateTime.now().getHour())+Integer.toString(LocalDateTime.now().getMinute())+Integer.toString(LocalDateTime.now().getSecond());
 
         RestTemplate restTemplate = new RestTemplate();
@@ -127,5 +128,13 @@ public class BuyDto {
         }
 
 
+    }
+
+    public List<String> idToName(List<Item> items, List<String> itemNames) {
+        for(Item i:items){
+            itemNames.add(i.getName());
+        }
+
+        return itemNames;
     }
 }
