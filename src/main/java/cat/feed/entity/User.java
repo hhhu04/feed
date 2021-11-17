@@ -1,7 +1,9 @@
 package cat.feed.entity;
 
+import cat.feed.dto.BuyDto;
 import lombok.*;
 import net.bytebuddy.implementation.bind.annotation.IgnoreForBinding;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Getter
@@ -92,9 +95,15 @@ public class User implements UserDetails{
         return user;
     }
 
-    public String createBox(User user) throws Exception {
-        String paths = "/img/basket"+user.getUserId()+".txt";
+    private String path(User user){
+        String paths = "/img/basket/"+user.getUserId()+".txt";
 //        String paths = "/home/cat/Desktop/basket/"+user.getUserId()+".txt";
+        return paths;
+    }
+
+    public String createBox(User user) throws Exception {
+        String paths = user.path(user);
+
         OutputStream outputStream = new FileOutputStream(paths);
         outputStream.close();
 
@@ -103,8 +112,7 @@ public class User implements UserDetails{
     }
 
     public void readBox(User user, long itemId) throws IOException {
-        String paths = "/img/basket/"+user.getUserId()+".txt";
-//        String paths = "/home/cat/Desktop/basket/"+user.getUserId()+".txt";
+        String paths = user.path(user);
         BufferedReader read = new BufferedReader(new FileReader(paths));
         ArrayList<Long> arr = new ArrayList<>();
 
@@ -122,8 +130,7 @@ public class User implements UserDetails{
     }
 
     public List<Long> myBox(User user) throws IOException {
-        String paths = "/img/basket/"+user.getUserId()+".txt";
-//        String paths = "/home/cat/Desktop/basket/"+user.getUserId()+".txt";
+        String paths = user.path(user);
         BufferedReader read = new BufferedReader(new FileReader(paths));
         ArrayList<Long> arr = new ArrayList<>();
 
@@ -140,8 +147,7 @@ public class User implements UserDetails{
 
 
     public void writeBox(User user,ArrayList<Long> arr) throws IOException {
-        String paths = "/img/basket/"+user.getUserId()+".txt";
-//        String paths = "/home/cat/Desktop/basket/"+user.getUserId()+".txt";
+        String paths = user.path(user);
 
         BufferedWriter write = new BufferedWriter(new FileWriter(paths));
 
@@ -151,9 +157,17 @@ public class User implements UserDetails{
         write.flush();
         write.close();
 
-
     }
 
+    public void boxReload(User user) throws Exception {
+        String paths = user.path(user);
+
+        BufferedWriter write = new BufferedWriter(new FileWriter(paths));
+        write.write("");
+        write.flush();
+        write.close();
+
+    }
 
 
 
@@ -189,4 +203,6 @@ public class User implements UserDetails{
     public boolean isEnabled() {
         return true;
     }
+
+
 }

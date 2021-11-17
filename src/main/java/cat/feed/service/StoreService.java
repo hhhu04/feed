@@ -67,4 +67,8 @@ public class StoreService {
         return map;
 
     }
+
+    public List<Item> idToName(BuyDto dto, List<Item> items) {
+         return itemRepository.findAllById(dto.getItems());
+    }
 }

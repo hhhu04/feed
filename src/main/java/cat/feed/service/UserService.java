@@ -1,6 +1,7 @@
 package cat.feed.service;
 
 import cat.feed.dto.AllDto;
+import cat.feed.dto.BuyDto;
 import cat.feed.entity.Item;
 import cat.feed.entity.User;
 import cat.feed.jwt.JwtTokenProvider;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -113,5 +115,9 @@ public class UserService  {
     }
 
 
-
+    public User boxReload(String userId) throws Exception {
+        User user = userRepository.findUserByUserId(userId);
+        user.boxReload(user);
+        return user;
+    }
 }
