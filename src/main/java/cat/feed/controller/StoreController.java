@@ -231,7 +231,6 @@ public class StoreController {
             session.invalidate();
 
             map = itemService.buySuccess(userId,tradeNumber,dto, tids,pg_token);
-            model.addAttribute("map",map);
 
             User user = new User();
             BuyLogs buyLogs = new BuyLogs();
@@ -263,5 +262,22 @@ public class StoreController {
         return "sample/fail";
     }
 
+
+    @GetMapping("/allLog")
+    @ResponseBody
+    public Page<BuyLogs> allFeed(Pageable pageable,@CookieValue(value = "token", required = false) Cookie cookies){
+        Page<BuyLogs>  list;
+        try{
+            String token = cookies.getValue();
+            String userName = jwtTokenProvider.getUserPk(token);
+            long userId = userService.id(userName);
+            list= buyLogService.AllLog(pageable,userId);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            list = null;
+        }
+        return list;
+    }
 
 }
