@@ -18,17 +18,139 @@
 <div class="base">
     <h2>내 정보</h2>
 <table class="feedTable" id="feedTable" border="1">
-<caption>
-    <button onclick="location.href='/user/update'">수정</button>
-    <button onclick="location.href='/myBasket'">장바구니</button>
-    <button onclick="location.href='#'">거래내역</button>
-</caption>
-</table>
+    <caption>
+        <button onclick="location.href='/user/update'">수정</button>
+        <button onclick="location.href='/myBasket'">장바구니</button>
+        <button onclick="log()">거래내역</button>
+    </caption>
+    </table>
+
+    <br><hr>
+    <table class="logTable" id="logTable" border="1">
+        <caption>
+<!--            <form><select id="select"><input type="button" id="page" value="전환"></select></form>-->
+        </caption>
+
+
+    </table>
+
+
 </div>
 
 <script>
+    $(function(){
+        $('#page').on('click', function(e) {
+            var host = [[${@environment.getProperty('test.url')}]];
+            var number = document.getElementById("sel").value-1;
+            var token = $.cookie("token");
+            var url = '/allLog?page='+number+'&size=3';
+            $( '#logTable').empty();
+            $.ajax({
+                url:url,
+                type:'GET',
+                beforeSend : function(xhr) {
+                    xhr.setRequestHeader("token",token);
+                },
+                success : function(data) {
+                    var list = ["번호","품목",'거래번호','시간','상태'];
+                    tr1();
+                    for(i=0;i<5;i++) {
+                        td1(list[i]);
+                    }
+
+                    for(i=0;i<data.content.length;i++) {
+                        tr1();
+                        td1(i + 1);
+                        td1(data.content[i]['tradeList'])
+                        td1(data.content[i]['tradeNumber'])
+                        td1(data.content[i]['createdAt'])
+                        td1(data.content[i]['status'])
+                    }
+                    tr1();
+
+
+                },
+                error:function(data){
+                    console.log(data);
+                }
+            });
+        });
+    });
 
 </script>
+
+
+<script  th:inline="javascript">
+    function log() {
+        var token = $.cookie("token");
+        $( '#logTable').empty();
+        $.ajax({
+            method: 'GET',
+            cache: false,
+            url: '/allLog?size=3',
+            beforeSend : function(xhr) {
+                xhr.setRequestHeader("token",token);
+            },
+            success: function (data) {
+                var host = [[${@environment.getProperty('test.url')}]];
+                var list = ["번호","품목",'거래번호','시간','상태'];
+                tr1();
+                for (i = 0; i < 5; i++) {
+                    td1(list[i]);
+                }
+
+                for (i = 0; i < data.totalPages; i++) {
+                    selects(i + 1)
+                }
+
+                for (i = 0; i < data.content.length; i++) {
+                    tr1();
+                    td1(i + 1);
+                    td1(data.content[i]['tradeList'])
+                    td1(data.content[i]['tradeNumber'])
+                    td1(data.content[i]['createdAt'])
+                    td1(data.content[i]['status'])
+                }
+                tr1();
+                captions()
+
+
+            },
+            error: function (data) {
+
+            }
+        });
+    }
+
+    function captions(){
+        $list = $('#logTable');
+        $list.append('<caption>' +
+            ' <form>' +
+            '<select id="sel"></select>' +
+            '<input type="button" id="page" value="페이지 이동">' +
+            '</form></caption>')
+    }
+
+    function selects(a){
+        $list = $('#sel');
+
+        $list.append('<option>'+a + '</option>');
+    };
+
+    function tr1(){
+        $list = $('#logTable');
+
+        $list.append('<tr>' + '</tr>');
+    };
+
+
+    function td1(a){
+        $list = $('#logTable');
+        $list.append('<td>' + a+ '</td>');
+    };
+
+</script>
+
 
 <script th:inline="javascript">
     var token = $.cookie("token");
@@ -69,13 +191,11 @@
             td0(data['items'].length)
 
 
-
         },
         error(data){
 
         }
         });
-
 
 
     function tr0(){
@@ -90,6 +210,8 @@
         $list.append('<td>' + a+ '</td>');
     };
 </script>
+
+
 <footer><hr></footer>
 </body>
 </html>
