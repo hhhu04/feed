@@ -2,11 +2,14 @@ package cat.feed.service;
 
 import cat.feed.dto.AllDto;
 import cat.feed.dto.BuyDto;
+import cat.feed.dto.MailDto;
 import cat.feed.entity.Item;
 import cat.feed.entity.User;
 import cat.feed.jwt.JwtTokenProvider;
 import cat.feed.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,6 +31,9 @@ public class UserService  {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
+
+    private final JavaMailSender mailSender;
+    private static final String FROM_ADDRESS = "ShinTest94@gmail.com";
 
     public boolean checkUser(User user){
         return userRepository.existsByUserId(user.getUserId());
@@ -119,5 +125,18 @@ public class UserService  {
         User user = userRepository.findUserByUserId(userId);
         user.boxReload(user);
         return user;
+    }
+
+    public void mailSend(MailDto email) throws Exception{
+//        SimpleMailMessage message = new SimpleMailMessage();
+//        message.setTo(user.get(0).getEmail());
+//        message.setFrom(MailService.FROM_ADDRESS);
+//        message.setSubject("요청하신 계정 정보");
+//        message.setText("id : "+user.get(0).getId()+"  pw : "+user.get(0).getPassword());
+
+        email.setInfo(email,mailSender,FROM_ADDRESS);
+
+//        mailSender.send(message);
+
     }
 }

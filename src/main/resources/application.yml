@@ -16,6 +16,19 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ShinTest94@gmail.com
+    password: q1w2e3r4!1234
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
 
 logging.level:
   org.hibernate.SQL: debug
