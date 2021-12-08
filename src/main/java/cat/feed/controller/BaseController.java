@@ -1,5 +1,6 @@
 package cat.feed.controller;
 
+import cat.feed.dto.MailDto;
 import cat.feed.entity.User;
 import cat.feed.jwt.JwtTokenProvider;
 import cat.feed.service.OauthService;
@@ -217,6 +218,24 @@ public class BaseController {
         }catch (Exception e){
             return new ResponseEntity<Object>(null,HttpStatus.CONFLICT);
         }
+    }
+
+
+    @GetMapping("/mail")
+    public String mail(){
+        return "mail";
+    }
+
+    @PostMapping("/mail")
+    @ResponseBody
+    public String sendMail(@RequestBody MailDto email){
+        try {
+            userService.mailSend(email);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:http://localhost:8080/mail";
+        }
+        return "redirect:http://localhost:8080/#/";
     }
 
 
