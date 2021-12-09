@@ -59,8 +59,8 @@ public class BaseController {
             model.addAttribute("user");
             user.setUserId(userId);
             user = userService.userInfo(user);
-            user.setPassword(null);
-//            model.addAttribute("info",user);
+            if(!user.getPassword().equals("111111")) user.setPassword(null);
+            model.addAttribute("info",user);
             return "myPage";
         }catch (Exception e){
             return "main";
@@ -228,32 +228,34 @@ public class BaseController {
 
     @PostMapping("/mail")
     @ResponseBody
-    public String sendMail(@RequestBody MailDto email){
+    public int sendMail(@RequestBody MailDto email){
         try {
-            userService.mailSend(email);
+            User user = new User();
+            user.setUserId(email.getAddress());
+            if(userService.checkUser(user)) {
+                user = userService.userInfo(user);
+                user.setPassword("111111");
+                userService.tempPassword(user);
+                System.out.println(userService.userInfo(user));
+
+
+//                userService.mailSend(email);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
-            return "redirect:http://localhost:8080/mail";
+            return -1;
         }
-        return "redirect:http://localhost:8080/#/";
+        return 1;
+    }
+
+    @GetMapping("/rePass")
+    public String rePass(){
+        return "rePass";
     }
 
 
-// 연습용~~~~~~~~~~~~~~~`
 
-    @GetMapping("/sample")
-    public String sample(Model model,@CookieValue(value="token", required=false) Cookie cookie){
-        try{
-            String token = cookie.getValue();
-            String user = jwtTokenProvider.getUserPk(token);
-            String nickName = userService.nickName(user);
-            model.addAttribute("user",nickName+"님 환영합니다.");
-            return "sample/sample";
-        }catch (Exception e){
-            model.addAttribute("user","게스트");
-            return "main";
-        }
-    }
 
 
 

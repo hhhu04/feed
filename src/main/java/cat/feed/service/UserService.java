@@ -49,7 +49,10 @@ public class UserService  {
     public String createToken(User user) throws IllegalArgumentException{
         Optional<User> user2 = userRepository.findByUserId(user.getUserId());
         String password =user2.get().getPassword();
-        if(!passwordEncoder.matches(user.getPassword(), password)) throw new IllegalArgumentException();
+
+        if(!password.equals("111111")) {
+            if (!passwordEncoder.matches(user.getPassword(), password)) throw new IllegalArgumentException();
+        }
         return jwtTokenProvider.createToken(user.getUserId(), user2.get().getRoles());
     }
 
@@ -128,15 +131,19 @@ public class UserService  {
     }
 
     public void mailSend(MailDto email) throws Exception{
-//        SimpleMailMessage message = new SimpleMailMessage();
-//        message.setTo(user.get(0).getEmail());
-//        message.setFrom(MailService.FROM_ADDRESS);
-//        message.setSubject("요청하신 계정 정보");
-//        message.setText("id : "+user.get(0).getId()+"  pw : "+user.get(0).getPassword());
-
         email.setInfo(email,mailSender,FROM_ADDRESS);
+
 
 //        mailSender.send(message);
 
+    }
+
+    public void tempPassword(User user) {
+        userRepository.save(user);
+    }
+
+    public void rePass(User user, User user2) {
+        user2.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user2);
     }
 }
