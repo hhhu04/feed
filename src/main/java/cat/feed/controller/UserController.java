@@ -6,6 +6,7 @@ import cat.feed.entity.User;
 import cat.feed.jwt.JwtTokenProvider;
 import cat.feed.service.OauthService;
 import cat.feed.service.UserService;
+import com.fasterxml.jackson.databind.deser.DataFormatReaders;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
@@ -31,7 +32,7 @@ public class UserController {
     private String paths = "/img/";
 
 
-    // 1:성공 -1:아디중복 -2:아디없음 -3그 밖의 에러
+    // 1:성공 -1:아디중복 -2:아디없음 -3그 밖의 에러  0 : 형식 틀림
 
 
 
@@ -39,6 +40,10 @@ public class UserController {
     @PostMapping("/user/join")
     @ResponseBody
     public int join(@RequestBody User user){
+
+        if(!user.getUserId().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) return 0;
+        System.out.println("1");
+        if(user.getPassword().length() < 6) return 0;
 
         if(!userService.checkUser(user)) {
             try {
@@ -76,7 +81,6 @@ public class UserController {
         if(userService.checkUser(user)) {
             try{
                 String token = userService.createToken(user);
-                System.out.println(token);
                 Cookie cookie = new Cookie("token",token);
                 cookie.setPath("/");
                 cookie.setMaxAge(30*60);
@@ -204,6 +208,27 @@ public class UserController {
         }
 
         return user.getBuyLogs();
+    }
+
+
+    @PostMapping("user/rePass")
+    @ResponseBody
+    public int rePass(@CookieValue(value="token", required=false) Cookie cookie,@RequestBody User user){
+        try{
+            System.out.println(user.getPassword());
+            String token = cookie.getValue();
+            String userId = jwtTokenProvider.getUserPk(token);
+            User user2 = new User();
+            user2.setUserId(userId);
+            user2 = userService.userInfo(user2);
+            userService.rePass(user,user2);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+        return 1;
     }
 
 

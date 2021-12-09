@@ -17,6 +17,11 @@
 
 <div class="base">
     <h2>내 정보</h2>
+
+    <p th:if="${info.getPassword()} != null">
+        비밀번호를 변경하세요.<button onclick="location.href='/rePass'">변경</button>
+    </p>
+
 <table class="feedTable" id="feedTable" border="1">
     <caption>
         <button onclick="location.href='/user/update'">수정</button>

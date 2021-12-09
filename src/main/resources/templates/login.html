@@ -13,7 +13,8 @@
 <form id="loginForm" method="post">
     <p>UserName : <input type="text" id="userId"></p>
     <p>Password &nbsp;: <input type="password" id="password"></p>
-    <p><input type="button" value="로그인" id="add"><input type="button" value="취소" id="back"><input type="button" value="가입" id="join"></p>
+    <p><input type="button" value="로그인" id="add"><input type="button" value="취소" id="back"><input type="button" value="가입" id="join">
+        <input type="button" value="비번찾기" onclick="location.href='/mail'"></p>
 </form>
 <form id="act" action="/kakao/login" method="get">
     <p><button class="kakao" type="submit"><img src="/imgs/kakao.png" class="social"> </button></p>

@@ -35,7 +35,13 @@
                 contentType : "application/json; charset=utf-8",
                 success : function(data){
                     console.log(data);
-                    alert("보냄")
+                    if( data === 1) {
+                        alert("보냄")
+                        history.back()
+                    }
+                    else {
+                        alert("계정 없음")
+                    }
                 },
                 error:function(data){
                     console.log(data);

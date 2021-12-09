@@ -1,10 +1,12 @@
 package cat.feed.dto;
 
+import cat.feed.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Data
 @AllArgsConstructor
@@ -21,8 +23,8 @@ public class MailDto {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email.getAddress());
         message.setFrom(from);
-        message.setSubject("메일 테스트");
-        message.setText("test");
+        message.setSubject("요청한 계정의 비밀번호");
+        message.setText("111111");
 
         mailSender.send(message);
     }
