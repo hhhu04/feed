@@ -239,7 +239,7 @@ public class BaseController {
                 System.out.println(userService.userInfo(user));
 
 
-//                userService.mailSend(email);
+                userService.mailSend(email);
             }
 
         } catch (Exception e) {
