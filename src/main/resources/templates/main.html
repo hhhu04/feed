@@ -15,33 +15,25 @@
 </header>
 <div class="base">
 <p th:text="${user}">손님><p th:if="${user}=='게스트'"></p>
-<button onclick="location.href='/feed'">게시판</button><button onclick="location.href='/store'">상점</button>
+<button class="btn btn-primary btn-lg btn-block" onclick="location.href='/feed'">게시판</button>
+    <button class="btn btn-secondary btn-lg btn-block" onclick="location.href='/store'">상점</button>
     <br><br>
     <hr>
 
-    <table class="feedTable">
-        <tr>
-            <td colspan="4">각 소스/jar 파일</td>
-        </tr>
-        <tr>
-            <td><a href="/down/newPark">newPark</a></td>
-            <td><a href="/down/dogram2">dogram2</a></td>
-        </tr>
-        <tr>
-            <td><a href="/down/park">park</a></td>
-            <td><a href="/down/dogram">dogram</a></td>
-        </tr>
-        <tr>
-            <td colspan="4">하단 프로젝트 제작 후 상단 안써본 것 적용해 제작<br>
-            war로 제작된 프로젝트는 알집으로</td>
-        </tr>
-        <tr>
-            <td colspan="4">본 게시판 소스 : <a href="https://github.com/hhhu04/feed.git" target="_blank">https://github.com/hhhu04/feed.git</a></td>
-        </tr>
-    </table>
+
+
 </div>
 
 
-<footer><hr></footer>
+<footer>
+    <hr>
+    <div class="base">
+    <p><a href="/down/newPark">newPark</a>
+    <a href="/down/dogram2">dogram2</a>
+    <a href="/down/park">park</a>
+    <a href="/down/dogram">dogram</a></p>
+    </div>
+    <hr>
+</footer>
 </body>
 </html>

@@ -256,6 +256,10 @@ public class BaseController {
 
 
 
+    @GetMapping("/test")
+    public String test(){
+        return "sample/sam";
+    }
 
 
 
