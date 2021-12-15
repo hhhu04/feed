@@ -236,8 +236,6 @@ public class BaseController {
                 user = userService.userInfo(user);
                 user.setPassword("111111");
                 userService.tempPassword(user);
-                System.out.println(userService.userInfo(user));
-
 
                 userService.mailSend(email);
             }

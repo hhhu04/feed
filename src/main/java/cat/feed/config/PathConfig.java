@@ -12,8 +12,6 @@ public class PathConfig implements WebMvcConfigurer {
     private String path;
 
 
-
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/img/**")
