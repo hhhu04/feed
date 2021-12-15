@@ -99,14 +99,13 @@ public class User implements UserDetails{
         return paths;
     }
 
-    public String createBox(User user) throws Exception {
+    public void createBox(User user) throws Exception {
         String paths = user.path(user);
 
         OutputStream outputStream = new FileOutputStream(paths);
         outputStream.close();
 
         user.setBox(paths);
-        return null;
     }
 
     public void readBox(User user, long itemId) throws IOException {

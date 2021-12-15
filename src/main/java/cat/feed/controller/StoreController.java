@@ -36,6 +36,9 @@ public class StoreController {
     private final BuyLogService buyLogService;
 
     @Value("${test.url}")
+    private String url;
+
+    @Value("${test.path}")
     private String path;
 
     @GetMapping("/store")
@@ -176,21 +179,19 @@ public class StoreController {
             e.printStackTrace();
         }
 
-
         return 1;
     }
 
 
     @PostMapping("/store/payment")
     @ResponseBody
-    public List<String> payment(@CookieValue(value = "token", required = false) Cookie cookies, @RequestBody BuyDto dto, HttpServletResponse response,
-                                HttpSession session){
+    public List<String> payment(@CookieValue(value = "token", required = false) Cookie cookies, @RequestBody BuyDto dto, HttpSession session){
         List<String> list = new ArrayList<>();
         try {
             String token = cookies.getValue();
             String userId = jwtTokenProvider.getUserPk(token);
 
-            list = itemService.buy(userId,dto,path);
+            list = itemService.buy(userId,dto,url);
             String tradeNumber = list.get(1);
             list.remove(1);
 

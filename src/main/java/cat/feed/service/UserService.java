@@ -134,8 +134,6 @@ public class UserService  {
         email.setInfo(email,mailSender,FROM_ADDRESS);
 
 
-//        mailSender.send(message);
-
     }
 
     public void tempPassword(User user) {
