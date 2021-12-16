@@ -137,4 +137,15 @@ public class BuyDto {
 
         return itemNames;
     }
+
+
+    public List<Item> quantity(List<Item> list) {
+        for(Item i : list){
+            int num = i.getTotal();
+            if(num >0) num--;
+            i.setTotal(num);
+        }
+
+        return list;
+    }
 }

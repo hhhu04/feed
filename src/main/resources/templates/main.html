@@ -9,9 +9,10 @@
 <body>
 <header>
     <div class="mainHeader">
-        <p th:if="${user}=='게스트'"><button onclick="location.href='/login'">로그인</button></p>
-        <p th:if="${user}!='게스트'"><button onclick="location.href='/user/myPage'">내 정보</button><button onclick="location.href='/login'">로그아웃</button></p>
+        <p th:if="${user}=='게스트'"><button  onclick="location.href='/login'">로그인</button></p>
+        <p th:if="${user}!='게스트'"><button  onclick="location.href='/user/myPage'">내 정보</button><button onclick="location.href='/login'">로그아웃</button></p>
     </div>
+
 </header>
 <div class="base">
 <p th:text="${user}">손님><p th:if="${user}=='게스트'"></p>
