@@ -45,10 +45,10 @@ public class OauthService {
     }
 
 
-    public void kakaoLogout() {
+    public void kakaoLogout(String url) {
 
         try {
-            response.sendRedirect("https://kauth.kakao.com/oauth/logout?client_id=b4dad0c3fd74414e64580f182c1e5df9&logout_redirect_uri=http://localhost:8080/logout/kakao");
+            response.sendRedirect("https://kauth.kakao.com/oauth/logout?client_id=b4dad0c3fd74414e64580f182c1e5df9&logout_redirect_uri=http://"+url+":8080/logout/kakao");
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -109,7 +109,7 @@ public class UserController {
 
     @GetMapping("/out/kakao")
     public void logoutKakao(HttpServletResponse response){
-        oauthService.kakaoLogout();
+        oauthService.kakaoLogout(url);
     }
 
     @GetMapping("/out/naver")

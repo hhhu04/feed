@@ -59,10 +59,13 @@ public class BaseController {
             model.addAttribute("user");
             user.setUserId(userId);
             user = userService.userInfo(user);
-            if(!user.getPassword().equals("111111")) user.setPassword(null);
+            if(!user.getType().equals("naver") && !user.getType().equals("kakao")) {
+                if (!user.getPassword().equals("111111")) user.setPassword(null);
+            }
             model.addAttribute("info",user);
             return "myPage";
         }catch (Exception e){
+            e.printStackTrace();
             return "main";
         }
     }
@@ -116,7 +119,7 @@ public class BaseController {
             Cookie cookie = new Cookie("token", null);
             cookie.setMaxAge(0);
             response.addCookie(cookie);
-            oauthService.kakaoLogout();
+            oauthService.kakaoLogout(url);
             return "redirect:http://"+url+":8080/";
         }catch (Exception e){
             return "redirect:http://"+url+":8080/";

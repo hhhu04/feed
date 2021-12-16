@@ -71,4 +71,13 @@ public class StoreService {
     public List<Item> idToName(BuyDto dto, List<Item> items) {
          return itemRepository.findAllById(dto.getItems());
     }
+
+
+    public void quantity(BuyDto dto) {
+        List<Item> list = new ArrayList<>();
+        list = itemRepository.findAllById(dto.getItems());
+        dto.quantity(list);
+        itemRepository.saveAll(list);
+
+    }
 }

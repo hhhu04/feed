@@ -171,6 +171,7 @@ public class StoreController {
             User user = new User();
             String token = cookies.getValue();
             String userId = jwtTokenProvider.getUserPk(token);
+            if(item.getTotal() == 0) return -1;
             item = itemService.insertBox(userId, item);
             userService.insertBox(userId,item.getId(),user);
 
@@ -243,6 +244,7 @@ public class StoreController {
             itemNames = dto.idToName(items,itemNames);
 
             buyLogService.save(map,itemNames,user,buyLogs);
+            itemService.quantity(dto);
 
 
         }catch (Exception e){
