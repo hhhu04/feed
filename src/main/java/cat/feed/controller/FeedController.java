@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 
 @Controller
 @RequiredArgsConstructor
+@CrossOrigin
 public class FeedController {
 
     private final FeedService feedService;

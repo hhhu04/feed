@@ -1,27 +1,16 @@
 package cat.feed.service;
 
 import cat.feed.dto.AllDto;
-import cat.feed.dto.BuyDto;
 import cat.feed.dto.MailDto;
-import cat.feed.entity.Item;
 import cat.feed.entity.User;
 import cat.feed.jwt.JwtTokenProvider;
 import cat.feed.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -36,7 +25,7 @@ public class UserService  {
     private static final String FROM_ADDRESS = "ShinTest94@gmail.com";
 
     public boolean checkUser(User user){
-        return userRepository.existsByUserId(user.getUserId());
+        return userRepository.existsByEmail(user.getEmail());
     }
 
     public void userJoin(User user) throws Exception{
@@ -47,23 +36,23 @@ public class UserService  {
 
 
     public String createToken(User user) throws IllegalArgumentException{
-        Optional<User> user2 = userRepository.findByUserId(user.getUserId());
+        Optional<User> user2 = userRepository.findByEmail(user.getEmail());
         String password =user2.get().getPassword();
 
         if(!password.equals("111111")) {
             if (!passwordEncoder.matches(user.getPassword(), password)) throw new IllegalArgumentException();
         }
-        return jwtTokenProvider.createToken(user.getUserId(), user2.get().getRoles());
+        return jwtTokenProvider.createToken(user.getEmail(), user2.get().getRoles());
     }
 
 
     public boolean check(String email,String type) {
-        return userRepository.existsByUserIdAndType(email,type);
+        return userRepository.existsByEmailAndType(email,type);
     }
 
     public String login(String email, String type) {
-        User user = userRepository.findByUserIdAndType(email,type);
-        return jwtTokenProvider.createToken(user.getUserId(), user.getRoles());
+        User user = userRepository.findByEmailAndType(email,type);
+        return jwtTokenProvider.createToken(user.getEmail(), user.getRoles());
     }
 
     public void kakaoJoin(User user) throws Exception {
@@ -77,13 +66,13 @@ public class UserService  {
     }
 
     public String nickName(String user) {
-        return userRepository.findByUserId(user).get().getNickName();
+        return userRepository.findByEmail(user).get().getNickName();
     }
 
-    public long id(String userId){return userRepository.findByUserId(userId).get().getId();}
+    public long id(String userId){return userRepository.findByEmail(userId).get().getId();}
 
     public User userInfo(User user) {
-        return userRepository.findByUserId(user.getUserId()).get();
+        return userRepository.findByEmail(user.getEmail()).get();
     }
 
     public void update(User user) {
@@ -92,7 +81,7 @@ public class UserService  {
     }
 
     public long key(String userPk) {
-        return userRepository.findByUserId(userPk).get().getId();
+        return userRepository.findByEmail(userPk).get().getId();
     }
 
     public AllDto allUser(AllDto dto) {
@@ -112,20 +101,20 @@ public class UserService  {
     }
 
     public void delete(User user) {
-        user = userRepository.findByUserId(user.getUserId()).get();
+        user = userRepository.findByEmail(user.getEmail()).get();
         userRepository.delete(user);
     }
 
 //장바구니에 물품 추가
     public void insertBox(String userId, Long id,User user) throws IOException {
-        user = userRepository.findUserByUserId(userId);
+        user = userRepository.findUserByEmail(userId);
         user.readBox(user,id);
 
     }
 
 
     public User boxReload(String userId) throws Exception {
-        User user = userRepository.findUserByUserId(userId);
+        User user = userRepository.findUserByEmail(userId);
         user.boxReload(user);
         return user;
     }

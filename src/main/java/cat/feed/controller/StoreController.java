@@ -95,7 +95,7 @@ public class StoreController {
             String token = cookies.getValue();
             String userId = jwtTokenProvider.getUserPk(token);
 
-            user.setUserId(userId);
+            user.setEmail(userId);
             user = userService.userInfo(user);
 
             item = itemService.myBox(item,user);

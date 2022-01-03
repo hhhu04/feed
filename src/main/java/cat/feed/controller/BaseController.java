@@ -57,7 +57,7 @@ public class BaseController {
             String userId = jwtTokenProvider.getUserPk(token);
             if(userId == null) throw new Exception();
             model.addAttribute("user");
-            user.setUserId(userId);
+            user.setEmail(userId);
             user = userService.userInfo(user);
             if(!user.getType().equals("naver") && !user.getType().equals("kakao")) {
                 if (!user.getPassword().equals("111111")) user.setPassword(null);
@@ -76,7 +76,7 @@ public class BaseController {
             String token = cookie.getValue();
             String userId = jwtTokenProvider.getUserPk(token);
             if(userId == null) throw new Exception();
-            user.setUserId(userId);
+            user.setEmail(userId);
             user = userService.userInfo(user);
             user.setPassword(null);
             model.addAttribute("user",user);
@@ -234,7 +234,7 @@ public class BaseController {
     public int sendMail(@RequestBody MailDto email){
         try {
             User user = new User();
-            user.setUserId(email.getAddress());
+            user.setEmail(email.getAddress());
             if(userService.checkUser(user)) {
                 user = userService.userInfo(user);
                 user.setPassword("111111");

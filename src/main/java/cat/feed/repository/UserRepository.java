@@ -8,17 +8,17 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    boolean existsByUserId(String userId);
+    boolean existsByEmail(String userId);
 
-    Optional<User> findByUserId(String username);
+    Optional<User> findByEmail(String username);
 
-    boolean existsByUserIdAndType(String email, String type);
+    boolean existsByEmailAndType(String email, String type);
 
-    User findByUserIdAndType(String email,String type);
+    User findByEmailAndType(String email, String type);
 
     List<User> findByRoles(String role);
 
     long countByRoles(String user);
 
-    User findUserByUserId(String userId);
+    User findUserByEmail(String userId);
 }
