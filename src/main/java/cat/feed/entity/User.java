@@ -28,7 +28,7 @@ public class User implements UserDetails{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String userId;
+    private String email;
 
     private String password;
 
@@ -94,7 +94,7 @@ public class User implements UserDetails{
     }
 
     private String path(User user){
-        String paths = "/img/basket/"+user.getUserId()+".txt";
+        String paths = "/img/basket/"+user.getEmail()+".txt";
 //        String paths = "/home/cat/Desktop/basket/"+user.getUserId()+".txt";
         return paths;
     }
@@ -178,7 +178,7 @@ public class User implements UserDetails{
 
     @Override
     public String getUsername() {
-        return userId;
+        return email;
     }
 
     @Override

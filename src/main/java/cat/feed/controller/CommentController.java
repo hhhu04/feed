@@ -1,10 +1,15 @@
 package cat.feed.controller;
 
+import cat.feed.code.Res;
+import cat.feed.code.ResponseMessage;
+import cat.feed.code.StatusCode;
 import cat.feed.entity.Comment;
 import cat.feed.jwt.JwtTokenProvider;
 import cat.feed.service.CommentService;
 import cat.feed.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -13,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class CommentController {
 
     private final CommentService commentService;
@@ -20,15 +26,14 @@ public class CommentController {
     private final UserService userService;
 
     @PostMapping("/comment/new")
-    @ResponseBody
-    public int newComment(@RequestBody Comment comment){
+    public ResponseEntity newComment(@RequestBody Comment comment){
         try{
-            System.out.println(comment);
+            System.out.println(1);
             comment=comment.newComment(comment);
-            commentService.newComment(comment);
-            return 1;
+//            commentService.newComment(comment);
+            return null;
         }catch (Exception e){
-            return -1;
+            return null;
         }
     }
 

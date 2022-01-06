@@ -1,5 +1,8 @@
 package cat.feed.controller;
 
+import cat.feed.code.Res;
+import cat.feed.code.ResponseMessage;
+import cat.feed.code.StatusCode;
 import cat.feed.entity.Feed;
 import cat.feed.jwt.JwtTokenProvider;
 import cat.feed.service.FeedService;
@@ -8,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.Cookie;
 import java.time.LocalDateTime;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
+@CrossOrigin
 public class FeedController {
 
     private final FeedService feedService;
@@ -35,51 +42,21 @@ public class FeedController {
     @GetMapping("favicon.ico") @ResponseBody public void returnNoFavicon() { }
 
 
-    @GetMapping("/feed")
-    public String feed(Model model, @CookieValue(value="token", required=false) Cookie cookie,Pageable pageable){
-        try{
-            String token = cookie.getValue();
-            String user = jwtTokenProvider.getUserPk(token);
-            String nickName = userService.nickName(user);
-            }catch (Exception e){
-            model.addAttribute("user","게스트");
-        }
-        return "feed";
-    }
 
-    @GetMapping("/feed/new")
-    public String newFeed(@CookieValue(value="token", required=false) Cookie cookies){
-        try {
-            String id = cookies.getValue();
-            return "newFeed";
-        }catch (Exception e){
-            return "login";
-        }
-    }
 
-    @GetMapping("/feed/{title}/{id}")
-    public String feedDetail(@CookieValue(value="token", required=false) Cookie cookies,
-                             @PathVariable(name = "title") String title,Model model,
-                             @PathVariable(name = "id") Long ids ){
+    @GetMapping("/feed/{id}")
+    public ResponseEntity feedDetail(@RequestHeader HttpHeaders headers, @PathVariable(name = "id") Long ids ){
         try {
             Feed feed = new Feed();
-            feed = feedService.feedDetail(title,feed,ids);
-            model.addAttribute(feed);
-            String token = cookies.getValue();
-            String user = jwtTokenProvider.getUserPk(token);
-            String nickName = userService.nickName(user);
-            long userKey = userService.id(user);
-            String role = userService.getRole(userKey);
-            model.addAttribute("role",role);
-            model.addAttribute("user",nickName);
-            model.addAttribute("id",userKey);
-            model.addAttribute("userId", user);
-            model.addAttribute("img","../../"+feed.getImg());
-            model.addAttribute("title",title);
-            return "feedDetail";
+            System.out.println(headers);
+            String token = headers.get("authorization").get(0).split(" ")[1];
+            feed = feedService.feedDetail(feed,ids);
+            return new ResponseEntity(Res.res(StatusCode.OK,
+                    ResponseMessage.READ_USER,feed), HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();
-            return "login";
+            return new ResponseEntity(Res.res(StatusCode.OK,
+                    ResponseMessage.READ_USER), HttpStatus.BAD_REQUEST);
         }
     }
 

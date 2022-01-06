@@ -1,5 +1,8 @@
 package cat.feed.controller;
 
+import cat.feed.code.Res;
+import cat.feed.code.ResponseMessage;
+import cat.feed.code.StatusCode;
 import cat.feed.entity.BuyLogs;
 import cat.feed.entity.Item;
 import cat.feed.entity.User;
@@ -9,7 +12,10 @@ import cat.feed.service.UserService;
 import com.fasterxml.jackson.databind.deser.DataFormatReaders;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -20,6 +26,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin
 public class UserController {
 
     private final UserService userService;
@@ -41,7 +48,7 @@ public class UserController {
     @ResponseBody
     public int join(@RequestBody User user){
 
-        if(!user.getUserId().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) return 0;
+        if(!user.getEmail().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) return 0;
         System.out.println("1");
         if(user.getPassword().length() < 6) return 0;
 
@@ -76,8 +83,7 @@ public class UserController {
     }
 
     @PostMapping("/user/login")
-    @ResponseBody
-    public int login(@RequestBody User user, HttpServletResponse response){
+    public ResponseEntity login(@RequestBody User user, HttpServletResponse response){
         if(userService.checkUser(user)) {
             try{
                 String token = userService.createToken(user);
@@ -85,17 +91,22 @@ public class UserController {
                 cookie.setPath("/");
                 cookie.setMaxAge(30*60);
                 response.addCookie(cookie);
-                return 1;
+//                return 1;
+                return new ResponseEntity(Res.res(StatusCode.OK,
+                        ResponseMessage.LOGIN_SUCCESS,token), HttpStatus.OK);
             }catch (IllegalArgumentException e){
-                return -1;
+                return new ResponseEntity(Res.res(StatusCode.BAD_REQUEST,
+                        ResponseMessage.LOGIN_FAIL), HttpStatus.OK);
             }
             catch (Exception e)
             {
-                return -3;
+                return new ResponseEntity(Res.res(StatusCode.OK,
+                        ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
-        return -2;
 
+        return new ResponseEntity(Res.res(StatusCode.BAD_REQUEST,
+                ResponseMessage.LOGIN_FAIL), HttpStatus.OK);
     }
 
     @PostMapping("/user/logout")
@@ -163,7 +174,7 @@ public class UserController {
         try {
             String userId = jwtTokenProvider.getUserPk(cookie.getValue());
             if (userId == null) throw new Exception();
-            user.setUserId(userId);
+            user.setEmail(userId);
             user = userService.userInfo(user);
             user.setPassword(null);
             return user;
@@ -180,7 +191,7 @@ public class UserController {
             String userId = jwtTokenProvider.getUserPk(cookie.getValue());
             if (userId == null) throw new Exception();
             User user2 = new User();
-            user2.setUserId(userId);
+            user2.setEmail(userId);
             user2 = userService.userInfo(user2);
             user2.setPassword(user.getPassword());
             user2.setNickName(user.getNickName());
@@ -199,7 +210,7 @@ public class UserController {
         try {
             String token = cookie.getValue();
             String userId = jwtTokenProvider.getUserPk(token);
-            user.setUserId(userId);
+            user.setEmail(userId);
             user = userService.userInfo(user);
 
 
@@ -219,7 +230,7 @@ public class UserController {
             String token = cookie.getValue();
             String userId = jwtTokenProvider.getUserPk(token);
             User user2 = new User();
-            user2.setUserId(userId);
+            user2.setEmail(userId);
             user2 = userService.userInfo(user2);
             userService.rePass(user,user2);
 

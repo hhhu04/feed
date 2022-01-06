@@ -9,8 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class FeedService {
@@ -20,14 +18,14 @@ public class FeedService {
 
 
     public void save(Feed feed, String email, MultipartFile img,String path) throws Exception{
-        feed = feed.upLoad(img,feed,userRepository.findByUserId(email).get().getId(),path);
-        feed.setNickName(userRepository.findByUserId(email).get().getNickName());
+        feed = feed.upLoad(img,feed,userRepository.findByEmail(email).get().getId(),path);
+        feed.setNickName(userRepository.findByEmail(email).get().getNickName());
         feedRepository.save(feed);
     }
 
     public void update(Feed feed, String email, MultipartFile img,String path) throws Exception{
-        feed = feed.upLoad(img,feed,userRepository.findByUserId(email).get().getId(),path);
-        feed.setNickName(userRepository.findByUserId(email).get().getNickName());
+        feed = feed.upLoad(img,feed,userRepository.findByEmail(email).get().getId(),path);
+        feed.setNickName(userRepository.findByEmail(email).get().getNickName());
         feedRepository.save(feed);
     }
 
@@ -37,8 +35,8 @@ public class FeedService {
         return list;
     }
 
-    public Feed feedDetail(String title, Feed list,Long id) {
-        list = feedRepository.findFeedByTitleAndId(title,id);
+    public Feed feedDetail(Feed list, Long id) {
+        list = feedRepository.findFeedById(id);
         return list;
     }
 
