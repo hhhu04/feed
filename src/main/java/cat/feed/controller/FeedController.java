@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin
+@CrossOrigin(origins="http://localhost:8000", maxAge=3600)
 public class FeedController {
 
     private final FeedService feedService;
@@ -48,8 +48,7 @@ public class FeedController {
     public ResponseEntity feedDetail(@RequestHeader HttpHeaders headers, @PathVariable(name = "id") Long ids ){
         try {
             Feed feed = new Feed();
-            System.out.println(headers);
-            String token = headers.get("authorization").get(0).split(" ")[1];
+            String token = headers.get("authorization").get(0);
             feed = feedService.feedDetail(feed,ids);
             return new ResponseEntity(Res.res(StatusCode.OK,
                     ResponseMessage.READ_USER,feed), HttpStatus.OK);

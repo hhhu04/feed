@@ -4,6 +4,7 @@ import cat.feed.jwt.JwtAuthenticationFilter;
 import cat.feed.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -37,6 +38,8 @@ public class webConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .cors()
+                .and()
                 .httpBasic().disable()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -49,7 +52,6 @@ public class webConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/feed/delete").authenticated()
                 .antMatchers("/feed/{id}").authenticated()
                 .antMatchers("/comment/new").authenticated()
-//                .antMatchers("/comment/new").permitAll()
                 .antMatchers("/store/**").authenticated()
                 .antMatchers("/admin/api/**").hasAnyRole("ADMIN","MASTER")
                 .antMatchers("/admin/master/**").hasRole("MASTER")
@@ -57,6 +59,7 @@ public class webConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(tokenProvider),
                         UsernamePasswordAuthenticationFilter.class);
+
 
         http.logout().logoutSuccessUrl("/");
 

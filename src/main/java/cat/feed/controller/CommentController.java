@@ -8,6 +8,7 @@ import cat.feed.jwt.JwtTokenProvider;
 import cat.feed.service.CommentService;
 import cat.feed.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,12 +27,16 @@ public class CommentController {
     private final UserService userService;
 
     @PostMapping("/comment/new")
-    public ResponseEntity newComment(@RequestBody Comment comment){
+    public ResponseEntity newComment(@RequestBody Comment comment,@RequestHeader HttpHeaders headers){
         try{
-            System.out.println(1);
+            String token = headers.get("authorization").get(0);
+            String email = jwtTokenProvider.getUserPk(token);
+            comment.setUserId(userService.id(email));
+            comment.setNickName(userService.nickName(email));
             comment=comment.newComment(comment);
-//            commentService.newComment(comment);
-            return null;
+            commentService.newComment(comment);
+            return new ResponseEntity(Res.res(StatusCode.OK,
+                    ResponseMessage.READ_USER,comment), HttpStatus.OK);
         }catch (Exception e){
             return null;
         }
