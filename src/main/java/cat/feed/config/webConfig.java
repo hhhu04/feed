@@ -39,7 +39,7 @@ public class webConfig extends WebSecurityConfigurerAdapter {
         http
                 .httpBasic().disable()
                 .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 역시 사용하지 않습니다.
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
                 .antMatchers("/user/login").anonymous()
@@ -47,7 +47,9 @@ public class webConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/myPage","/user/update","/store/ok","/store","/store/new").permitAll()
                 .antMatchers("/user/**").authenticated()
                 .antMatchers("/feed/delete").authenticated()
+                .antMatchers("/feed/{id}").authenticated()
                 .antMatchers("/comment/new").authenticated()
+//                .antMatchers("/comment/new").permitAll()
                 .antMatchers("/store/**").authenticated()
                 .antMatchers("/admin/api/**").hasAnyRole("ADMIN","MASTER")
                 .antMatchers("/admin/master/**").hasRole("MASTER")

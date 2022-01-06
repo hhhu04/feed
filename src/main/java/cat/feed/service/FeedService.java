@@ -35,8 +35,8 @@ public class FeedService {
         return list;
     }
 
-    public Feed feedDetail(String title, Feed list,Long id) {
-        list = feedRepository.findFeedByTitleAndId(title,id);
+    public Feed feedDetail(Feed list, Long id) {
+        list = feedRepository.findFeedById(id);
         return list;
     }
 
