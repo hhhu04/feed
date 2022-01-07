@@ -2,7 +2,7 @@ test:
   url: localhost
 #  url: 118.67.133.148
 #  url: 1
-  path: /home/cat/web/test/img
+  path: /home/cat
 #  path: /img
 
 
