@@ -20,6 +20,7 @@ public class FeedService {
     public void save(Feed feed, String email, MultipartFile img,String path) throws Exception{
         feed = feed.upLoad(img,feed,userRepository.findByEmail(email).get().getId(),path);
         feed.setNickName(userRepository.findByEmail(email).get().getNickName());
+        System.out.println(feed);
         feedRepository.save(feed);
     }
 

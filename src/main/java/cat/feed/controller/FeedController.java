@@ -3,7 +3,6 @@ package cat.feed.controller;
 import cat.feed.code.Res;
 import cat.feed.code.ResponseMessage;
 import cat.feed.code.StatusCode;
-import cat.feed.dto.FeedDto;
 import cat.feed.entity.Feed;
 import cat.feed.jwt.JwtTokenProvider;
 import cat.feed.service.FeedService;
@@ -15,18 +14,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
-import java.io.InputStream;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 
 @RestController
@@ -110,47 +103,34 @@ public class FeedController {
 
 
     @PostMapping("/feed/new")
-    @ResponseBody
-//    public int newFeed(@RequestHeader HttpHeaders headers,
-//                          @RequestParam(value = "title",required = false) String title,
-//                          @RequestParam(value = "body",required = false) String body,
-//                          @RequestParam(value = "img",required = false) MultipartFile img){
-    public int newFeed(@RequestHeader HttpHeaders headers,
-              @RequestBody FeedDto feed){
-//                System.out.println(title);
-//        System.out.println(body);
-//        System.out.println(img);
-        System.out.println(feed.getTitle());
-        System.out.println(feed.getBody());
-        System.out.println(feed.getImg());
-        Feed feeds = new Feed();
-        feed.setTitle(feed.getTitle());
-        feed.setBody(feed.getBody());
-
-        String OUTPUT_FILE_PATH = "/home/cat";
-        String FILE_URL = feed.getImg();
+    public ResponseEntity newFeed(@RequestHeader HttpHeaders headers,
+                          @RequestParam(value = "title",required = false) String title,
+                          @RequestParam(value = "body",required = false) String body,
+                          @RequestParam(value = "img",required = false) MultipartFile img){
+        Feed feed = new Feed();
+        feed.setTitle(title);
+        feed.setBody(body);
 
         try {
-            InputStream in = new URL(FILE_URL).openStream();
-            Path imagePath = Paths.get(OUTPUT_FILE_PATH);
-            Files.copy(in, imagePath);
-
-
             String userId = jwtTokenProvider.getUserPk(headers.get("authorization").get(0));
-//            feeds.setCreatedAt(LocalDateTime.now());
-//            feedService.save(feeds, userId,feed.getImg(),path);
-            return 1;
+            feed.setCreatedAt(LocalDateTime.now());
+            feedService.save(feed, userId,img,path);
+            return new ResponseEntity(Res.res(StatusCode.OK,
+                    ResponseMessage.SAVE_SUCCESS), HttpStatus.OK);
         }catch (NullPointerException e){
-            return -1;
+            e.printStackTrace();
+            return new ResponseEntity(Res.res(StatusCode.OK,
+                    ResponseMessage.SAVE_FAIL), HttpStatus.BAD_REQUEST);
         }
         catch (Exception e){
             e.printStackTrace();
-            return -3;
+            return new ResponseEntity(Res.res(StatusCode.OK,
+                    ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
 
-    @GetMapping("/allFeed")
+    @GetMapping("/all_feed")
     @ResponseBody
     public Page<Feed> allFeed(Pageable pageable){
         Page<Feed>  list= feedService.AllFeed(pageable);

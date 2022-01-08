@@ -4,18 +4,15 @@ import cat.feed.code.Res;
 import cat.feed.code.ResponseMessage;
 import cat.feed.code.StatusCode;
 import cat.feed.entity.BuyLogs;
-import cat.feed.entity.Item;
 import cat.feed.entity.User;
 import cat.feed.jwt.JwtTokenProvider;
 import cat.feed.service.OauthService;
 import cat.feed.service.UserService;
-import com.fasterxml.jackson.databind.deser.DataFormatReaders;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -168,19 +165,20 @@ public class UserController {
         }
     }
 
-    @PostMapping("/user/info")
-    @ResponseBody
-    public User info(@CookieValue(value="token", required=false) Cookie cookie, User user){
+    @GetMapping("/user/info")
+    public ResponseEntity info(@RequestHeader HttpHeaders headers, User user){
         try {
-            String userId = jwtTokenProvider.getUserPk(cookie.getValue());
+            String userId = jwtTokenProvider.getUserPk(headers.get("authorization").get(0));
             if (userId == null) throw new Exception();
             user.setEmail(userId);
             user = userService.userInfo(user);
-            user.setPassword(null);
-            return user;
+
+            return new ResponseEntity(Res.res(StatusCode.OK,
+                    ResponseMessage.READ_USER,user), HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();
-            return user;
+            return new ResponseEntity(Res.res(StatusCode.SERVICE_UNAVAILABLE,
+                    ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 

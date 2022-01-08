@@ -24,8 +24,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
+@CrossOrigin
 public class BaseController {
 
     private final JwtTokenProvider jwtTokenProvider;

@@ -36,9 +36,11 @@ public class CommentController {
             comment=comment.newComment(comment);
             commentService.newComment(comment);
             return new ResponseEntity(Res.res(StatusCode.OK,
-                    ResponseMessage.READ_USER,comment), HttpStatus.OK);
+                    ResponseMessage.SAVE_SUCCESS,comment), HttpStatus.OK);
         }catch (Exception e){
-            return null;
+            e.printStackTrace();
+            return new ResponseEntity(Res.res(StatusCode.OK,
+                    ResponseMessage.SAVE_FAIL), HttpStatus.OK);
         }
     }
 

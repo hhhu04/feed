@@ -54,7 +54,7 @@ public class Feed {
 
     public Feed upLoad(MultipartFile img,Feed feed, Long id,String path) throws Exception {
         feed.setUserId(id);
-        feed.setImg(imgSet(img,path));
+        if(img != null) feed.setImg(imgSet(img,path));
 
         return feed;
     }
