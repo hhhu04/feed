@@ -18,12 +18,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin
+@CrossOrigin()
 public class UserController {
 
     private final UserService userService;
@@ -32,6 +33,10 @@ public class UserController {
 
     @Value("${test.url}")
     private  String url;
+
+    @Value("localhost")
+    private String vue;
+
 
     private String paths = "/img/";
 
@@ -137,10 +142,10 @@ public class UserController {
     }
 
     @GetMapping(value = "/{socialLoginType}/login")
-    public void socialLoginType(
-            @PathVariable(name = "socialLoginType") String socialLoginType) {
+    public String socialLoginType(
+            @PathVariable(name = "socialLoginType") String socialLoginType,@RequestHeader HttpHeaders headers) {
         System.out.println(socialLoginType);
-        oauthService.request(socialLoginType,url);
+            return oauthService.request(socialLoginType,url);
     }
 
     @GetMapping(value = "/{socialLoginType}/callback")
@@ -148,20 +153,20 @@ public class UserController {
             @PathVariable(name = "socialLoginType") String socialLoginType,
             @RequestParam(name = "code") String code, HttpServletResponse response,HttpServletRequest request) {
         String email = oauthService.requestAccessToken(socialLoginType, code,url);
-
         if (userService.check(email, socialLoginType)) {
             String token = userService.login(email, socialLoginType);
             Cookie cookie = new Cookie("token",token);
             cookie.setPath("/");
             cookie.setMaxAge(30*60);
             response.addCookie(cookie);
-            return "<script>alert('로그인');  window.location = 'http://"+url+":8080/'</script>";
+            return "<script> window.location = 'http://"+vue+":8000/social?token="+token+"'  </script>";
+//            return "<script> window.opener.result("+token+");  </script>";
         } else {
             Cookie cookie = new Cookie("email",email);
             cookie.setPath("/");
             cookie.setMaxAge(30*60);
             response.addCookie(cookie);
-            return "<script>alert('가입진행. '); window.location = 'http://"+url+":8080/"+socialLoginType+"/join'</script>";
+            return "<script>alert('가입진행. '); window.location = 'http://"+url+":8000/"+socialLoginType+"/join'</script>";
         }
     }
 

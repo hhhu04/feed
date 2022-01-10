@@ -23,16 +23,13 @@ public class OauthService {
     private final GoogleOauth googleOauth;
     private final NaverOauth naverOauth;
 
-    public void request(String socialLoginType,String url) {
+    public String request(String socialLoginType,String url)  {
         String redirectURL;
         if (socialLoginType.equals("google")) redirectURL = googleOauth.getOauthRedirectURL();
         else if(socialLoginType.equals("naver")) redirectURL = naverOauth.getOauthRedirectURL(url);
         else redirectURL = kakaoOauth.getOauthRedirectURL(url);
-        try {
-            response.sendRedirect(redirectURL);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//                    response.sendRedirect(redirectURL);
+        return redirectURL;
     }
 
     public String requestAccessToken(String socialLoginType, String code,String url) {

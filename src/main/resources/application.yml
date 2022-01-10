@@ -1,10 +1,10 @@
 test:
-  url: localhost
+  url: 192.168.88.128
 #  url: 118.67.133.148
 #  url: 1
   path: /home/cat
 #  path: /img
-
+  vue: localhost
 
 
 spring:
