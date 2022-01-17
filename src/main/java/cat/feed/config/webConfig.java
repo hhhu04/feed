@@ -19,6 +19,7 @@ import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import java.util.Arrays;
 
@@ -52,10 +53,11 @@ public class webConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/user/login").anonymous()
                 .antMatchers("/user/join/**").anonymous()
-                .antMatchers("/user/myPage","/user/update","/store/ok","/store","/store/new").permitAll()
+                .antMatchers("/user/myPage","/user/update","/store/ok","/store").permitAll()
                 .antMatchers("/user/**").authenticated()
                 .antMatchers("/feed/delete").authenticated()
                 .antMatchers("/feed/{id}").authenticated()
+                .antMatchers("/store/{title}").authenticated()
                 .antMatchers("/comment/new").authenticated()
                 .antMatchers("/store/**").authenticated()
                 .antMatchers("/admin/api/**").hasAnyRole("ADMIN","MASTER")
@@ -70,15 +72,6 @@ public class webConfig extends WebSecurityConfigurerAdapter {
 
     }
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.httpFirewall(defaultHttpFirewall());
-    }
-
-    @Bean
-    public HttpFirewall defaultHttpFirewall() {
-        return new DefaultHttpFirewall();
-    }
 
 
 

@@ -32,11 +32,11 @@ public class StoreService {
         return list;
     }
 
-    public Item feedDetail(String title, Item item) {
-        return itemRepository.findByName(title);
+    public Item feedDetail(long id) {
+        return itemRepository.findById(id).get();
     }
 
-    public int newItem(Item item, MultipartFile img, String path) throws IOException {
+    public int newItem(Item item, MultipartFile img, String path) throws Exception {
         item = item.newItem(item,img,path);
         itemRepository.save(item);
         return 1;

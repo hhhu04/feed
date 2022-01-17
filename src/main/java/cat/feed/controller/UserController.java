@@ -24,7 +24,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin()
+@CrossOrigin("*")
 public class UserController {
 
     private final UserService userService;
@@ -86,6 +86,7 @@ public class UserController {
 
     @PostMapping("/user/login")
     public ResponseEntity login(@RequestBody User user, HttpServletResponse response){
+
         if(userService.checkUser(user)) {
             try{
                 String token = userService.createToken(user);

@@ -1,5 +1,8 @@
 package cat.feed.controller;
 
+import cat.feed.code.Res;
+import cat.feed.code.ResponseMessage;
+import cat.feed.code.StatusCode;
 import cat.feed.dto.BuyDto;
 import cat.feed.entity.BuyLogs;
 import cat.feed.entity.Feed;
@@ -13,6 +16,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +27,15 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
+@CrossOrigin
 public class StoreController {
 
     private final StoreService itemService;
@@ -56,32 +64,30 @@ public class StoreController {
         return "store/mainStore";
     }
 
-    @GetMapping("/allItem")
+    @GetMapping("/all_item")
     @ResponseBody
-    public Page<Item> allFeed(Pageable pageable) {
+    public ResponseEntity allFeed(Pageable pageable) {
         Page<Item> list = itemService.AllFeed(pageable);
-        return list;
+        return new ResponseEntity(Res.res(StatusCode.OK,
+                ResponseMessage.CREATED_ITEM,list), HttpStatus.OK);
     }
 
-    @GetMapping("/item/{title}")
-    public String itemDetail(@CookieValue(value = "token", required = false) Cookie cookies,
-                             @PathVariable(name = "title") String title, Model model) {
+    @GetMapping("/store/{id}")
+    public ResponseEntity itemDetail(@RequestHeader HttpHeaders header,
+                             @PathVariable(name = "id") Long id, Model model) {
         try {
-            Item item = new Item();
-            item = itemService.feedDetail(title, item);
-            model.addAttribute("item",item);
-            String token = cookies.getValue();
+            Item item;
+            item = itemService.feedDetail(id);
+            String token = header.get("authorization").get(0);
             String user = jwtTokenProvider.getUserPk(token);
             long userId = userService.id(user);
-            String role = userService.getRole(userId);
 
-            model.addAttribute("id",userId);
-            model.addAttribute("role",role);
-
-            return "store/itemDetail";
+            return new ResponseEntity(Res.res(StatusCode.OK,
+                    ResponseMessage.READ_ITEM,item), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return "login";
+            return new ResponseEntity(Res.res(StatusCode.INTERNAL_SERVER_ERROR,
+                    ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -122,23 +128,23 @@ public class StoreController {
         return "store/myBox";
     }
 
+//
+//    @GetMapping("/store/new")
+//    public String item(@CookieValue(value = "token", required = false) Cookie cookies){
+//        return "store/newItem";
+//    }
 
-    @GetMapping("/store/new")
-    public String item(@CookieValue(value = "token", required = false) Cookie cookies){
-        return "store/newItem";
-    }
-
-    @PostMapping("/newItem")
+    @PostMapping("/store/new")
     @ResponseBody
-    public int newItem(@CookieValue(value = "token", required = false) Cookie cookies,
-                       @RequestParam(value = "title",required = false) String title,
-                       @RequestParam(value = "number",required = false) int total,
-                       @RequestParam(value = "price",required = false) int price,
-                       @RequestParam(value = "img",required = false) MultipartFile img){
+    public ResponseEntity newItem(@RequestHeader HttpHeaders header,
+                                  @RequestParam(value = "title",required = false) String title,
+                                  @RequestParam(value = "amount",required = false) int total,
+                                  @RequestParam(value = "price",required = false) int price,
+                                  @RequestParam(value = "img",required = false) MultipartFile img){
 
         try{
             Item item = new Item();
-            String token = cookies.getValue();
+            String token = header.get("authorization").get(0);
             String id = jwtTokenProvider.getUserPk(token);
             String nickName = userService.nickName(id);
             long userKeyId = userService.id(id);
@@ -151,14 +157,20 @@ public class StoreController {
 
             int num = itemService.newItem(item,img,path);
 
-
-
-        }catch (Exception e){
+            return new ResponseEntity(Res.res(StatusCode.OK,
+                    ResponseMessage.CREATED_ITEM), HttpStatus.OK);
+        }
+        catch (SQLException e){
             e.printStackTrace();
+            return new ResponseEntity(Res.res(StatusCode.INTERNAL_SERVER_ERROR,
+                    ResponseMessage.DB_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity(Res.res(StatusCode.INTERNAL_SERVER_ERROR,
+                    ResponseMessage.CREATED_ITEM), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-
-        return 1;
     }
 
 

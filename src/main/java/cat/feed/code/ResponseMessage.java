@@ -9,6 +9,12 @@ public class ResponseMessage {
     public static final String UPDATE_USER = "회원 정보 수정 성공";
     public static final String DELETE_USER = "회원 탈퇴 성공";
 
+    public static final String CREATED_ITEM = "상품 등록 성공";
+    public static final String READ_ITEM = "상품 조회 성공";
+    public static final String UPDATE_ITEM = "상품 정보 수정 성공";
+    public static final String DELETE_ITEM = "상품 삭제 성공";
+
+
     public static final String SAVE_SUCCESS = "저장 성공";
     public static final String SAVE_FAIL = "저장 실패";
 
