@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,26 +49,29 @@ public class UserController {
 
     @PostMapping("/user/join")
     @ResponseBody
-    public int join(@RequestBody User user){
+    public ResponseEntity join(@RequestBody User user){
 
-        if(!user.getEmail().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) return 0;
-        System.out.println("1");
-        if(user.getPassword().length() < 6) return 0;
+        if(!user.getEmail().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) return new ResponseEntity(Res.res(StatusCode.OK,
+                ResponseMessage.CREATED_FAIL), HttpStatus.BAD_REQUEST);
+        if(user.getPassword().length() < 6) return new ResponseEntity(Res.res(StatusCode.OK,
+                ResponseMessage.CREATED_FAIL), HttpStatus.BAD_REQUEST);
 
         if(!userService.checkUser(user)) {
             try {
                 userService.userJoin(user);
-                return 1;
+                return new ResponseEntity(Res.res(StatusCode.OK,
+                        ResponseMessage.CREATED_USER), HttpStatus.OK);
             }catch (Exception e){
                 e.printStackTrace();
-                return -2;
+                return new ResponseEntity(Res.res(StatusCode.INTERNAL_SERVER_ERROR,
+                        ResponseMessage.CREATED_FAIL), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
-        else return -1;
+        else return new ResponseEntity(Res.res(StatusCode.OK,
+                ResponseMessage.CREATED_FAIL), HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/user/join/{socialLoginType}")
-    @ResponseBody
     public int socialJoin(@RequestBody User user,@PathVariable(name = "socialLoginType") String socialLoginType){
 
         if(!userService.checkUser(user)) {
@@ -94,7 +98,6 @@ public class UserController {
                 cookie.setPath("/");
                 cookie.setMaxAge(30*60);
                 response.addCookie(cookie);
-//                return 1;
                 return new ResponseEntity(Res.res(StatusCode.OK,
                         ResponseMessage.LOGIN_SUCCESS,token), HttpStatus.OK);
             }catch (IllegalArgumentException e){
@@ -167,14 +170,14 @@ public class UserController {
             cookie.setPath("/");
             cookie.setMaxAge(30*60);
             response.addCookie(cookie);
-            return "<script>alert('가입진행. '); window.location = 'http://"+url+":8000/"+socialLoginType+"/join'</script>";
+            return "<script>alert('가입진행. '); window.location = 'http://"+vue+":8000/join/"+socialLoginType+"'</script>";
         }
     }
 
     @GetMapping("/user/info")
     public ResponseEntity info(@RequestHeader HttpHeaders headers, User user){
         try {
-            String userId = jwtTokenProvider.getUserPk(headers.get("authorization").get(0));
+            String userId = jwtTokenProvider.getUserPk(Objects.requireNonNull(headers.get("authorization")).get(0));
             if (userId == null) throw new Exception();
             user.setEmail(userId);
             user = userService.userInfo(user);
@@ -188,19 +191,19 @@ public class UserController {
         }
     }
 
-    @PostMapping("/user/update/save")
-    @ResponseBody
+    @PutMapping("/user/update")
     public int updateSve(@RequestBody User user,@CookieValue(value="token", required=false) Cookie cookie){
         try{
-            String userId = jwtTokenProvider.getUserPk(cookie.getValue());
-            if (userId == null) throw new Exception();
-            User user2 = new User();
-            user2.setEmail(userId);
-            user2 = userService.userInfo(user2);
-            user2.setPassword(user.getPassword());
-            user2.setNickName(user.getNickName());
-            user2.setUpdatedAt(LocalDateTime.now());
-            userService.update(user2);
+            System.out.println("put");
+//            String userId = jwtTokenProvider.getUserPk(cookie.getValue());
+//            if (userId == null) throw new Exception();
+//            User user2 = new User();
+//            user2.setEmail(userId);
+//            user2 = userService.userInfo(user2);
+//            user2.setPassword(user.getPassword());
+//            user2.setNickName(user.getNickName());
+//            user2.setUpdatedAt(LocalDateTime.now());
+//            userService.update(user2);
         }catch (Exception e){
 
         }

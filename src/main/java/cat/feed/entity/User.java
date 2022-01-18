@@ -94,8 +94,9 @@ public class User implements UserDetails{
     }
 
     private String path(User user){
-        String paths = "/img/basket/"+user.getEmail()+".txt";
+//        String paths = "/img/basket/"+user.getEmail()+".txt";
 //        String paths = "/home/cat/Desktop/basket/"+user.getUserId()+".txt";
+        String paths = "/home/cat/img/basket/"+user.getEmail()+".txt";
         return paths;
     }
 
