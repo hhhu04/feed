@@ -19,6 +19,9 @@ public class PathConfig implements WebMvcConfigurer {
 
         registry.addResourceHandler("/item/img/**")
                 .addResourceLocations("file:///"+path+"/");
+
+
+
     }
 
 

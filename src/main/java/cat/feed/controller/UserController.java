@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -155,7 +156,7 @@ public class UserController {
     @GetMapping(value = "/{socialLoginType}/callback")
     public String callback(
             @PathVariable(name = "socialLoginType") String socialLoginType,
-            @RequestParam(name = "code") String code, HttpServletResponse response,HttpServletRequest request) {
+            @RequestParam(name = "code") String code, HttpServletResponse response) {
         String email = oauthService.requestAccessToken(socialLoginType, code,url);
         if (userService.check(email, socialLoginType)) {
             String token = userService.login(email, socialLoginType);
@@ -166,11 +167,7 @@ public class UserController {
             return "<script> window.location = 'http://"+vue+":8000/social?token="+token+"'  </script>";
 //            return "<script> window.opener.result("+token+");  </script>";
         } else {
-            Cookie cookie = new Cookie("email",email);
-            cookie.setPath("/");
-            cookie.setMaxAge(30*60);
-            response.addCookie(cookie);
-            return "<script>alert('가입진행. '); window.location = 'http://"+vue+":8000/join/"+socialLoginType+"'</script>";
+            return "<script>alert('가입진행. '); window.location = 'http://"+vue+":8000/join/"+socialLoginType+"/"+email+"'</script>";
         }
     }
 
