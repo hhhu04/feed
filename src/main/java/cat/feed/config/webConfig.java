@@ -53,7 +53,7 @@ public class webConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/user/login").anonymous()
                 .antMatchers("/user/join/**").anonymous()
-                .antMatchers("/user/myPage","/user/update","/store/ok","/store").permitAll()
+                .antMatchers("/user/myPage","/user/update","/store/ok","/store","/store/img").permitAll()
                 .antMatchers("/user/**").authenticated()
                 .antMatchers("/feed/delete").authenticated()
                 .antMatchers("/feed/{id}").authenticated()

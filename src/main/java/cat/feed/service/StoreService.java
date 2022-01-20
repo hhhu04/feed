@@ -1,7 +1,6 @@
 package cat.feed.service;
 
 import cat.feed.dto.BuyDto;
-import cat.feed.entity.Feed;
 import cat.feed.entity.Item;
 import cat.feed.entity.User;
 import cat.feed.repository.ItemRepository;
@@ -32,7 +31,7 @@ public class StoreService {
         return list;
     }
 
-    public Item feedDetail(long id) {
+    public Item feedDetail(long id, String path) throws IOException {
         return itemRepository.findById(id).get();
     }
 
