@@ -11,16 +11,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.time.LocalDateTime;
+import java.util.Base64;
 
 @RestController
 @RequiredArgsConstructor
@@ -55,6 +58,30 @@ public class FeedController {
             e.printStackTrace();
             return new ResponseEntity(Res.res(StatusCode.OK,
                     ResponseMessage.READ_USER), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = "/feed/img",produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<byte[]> storeImg(@RequestParam(name = "image") String img){
+        String url = path+"/"+img;
+        try {
+            File file = new File(url);
+            BufferedImage image = ImageIO.read(new File(url));
+            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+            ImageIO.write(image,"jpg",ba);
+            ba.flush();
+            HttpHeaders headers = new HttpHeaders();
+            byte[] media = ba.toByteArray();
+            headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+
+            Base64.Encoder encoder = Base64.getEncoder();
+            byte[] encodedBytes = encoder.encode(media);
+
+            ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(encodedBytes, headers, HttpStatus.OK);
+            return responseEntity;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

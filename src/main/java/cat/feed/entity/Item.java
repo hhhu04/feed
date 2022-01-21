@@ -70,7 +70,7 @@ public class Item {
 
         file.getOriginalFilename();
         if(!file.getOriginalFilename().isEmpty()) {
-            file.transferTo(new File(path, imgName));
+            file.transferTo(new File(path+"/img", imgName));
             img = "img/"+imgName;
             System.out.println("99");
         }else {
@@ -84,23 +84,6 @@ public class Item {
     }
 
 
-    public Blob blob(String img, String path) throws Exception {
-        String url = path + "/" + img;
-        File file = new File(url);
-        Blob blob = null;
-        FileInputStream inputStream = null;
 
-        byte[] byteArray = new byte[(int) file.length()];
-        inputStream = new FileInputStream(file);
-        inputStream.read(byteArray);
-
-        blob = new SerialBlob(byteArray);
-        System.out.println(blob.toString());
-
-        inputStream.close();
-
-
-        return blob;
-    }
 
 }
