@@ -35,11 +35,10 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
+import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 import static io.jsonwebtoken.lang.Classes.getResourceAsStream;
 
@@ -105,20 +104,20 @@ public class StoreController {
     @GetMapping(value = "/store/img",produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> storeImg(@RequestParam(name = "image") String img){
         String url = path+"/"+img;
-//        String url = "/"+img;
-        System.out.println(url);
-
         try {
             File file = new File(url);
-//            Image image = ImageIO.read(new File(url));
+            BufferedImage image = ImageIO.read(new File(url));
+            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+            ImageIO.write(image,"jpg",ba);
+            ba.flush();
             HttpHeaders headers = new HttpHeaders();
-
-            InputStream in = getResourceAsStream(url);
-            System.out.println(in);
-            byte[] media = IOUtils.toByteArray(in);
+            byte[] media = ba.toByteArray();
             headers.setCacheControl(CacheControl.noCache().getHeaderValue());
 
-            ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
+            Base64.Encoder encoder = Base64.getEncoder();
+            byte[] encodedBytes = encoder.encode(media);
+
+            ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(encodedBytes, headers, HttpStatus.OK);
             return responseEntity;
         } catch (Exception e) {
             e.printStackTrace();

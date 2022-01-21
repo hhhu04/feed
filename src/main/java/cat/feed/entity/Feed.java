@@ -67,7 +67,7 @@ public class Feed {
 
         file.getOriginalFilename();
         if(!file.getOriginalFilename().isEmpty()) {
-            file.transferTo(new File(path, imgName));
+            file.transferTo(new File(path+"/img", imgName));
             img = "img/"+imgName;
             System.out.println("99");
         }else {
