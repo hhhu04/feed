@@ -108,7 +108,7 @@ public class UserService  {
 //장바구니에 물품 추가
     public void insertBox(String userId, Long id,User user) throws IOException {
         user = userRepository.findUserByEmail(userId);
-        user.readBox(user,id);
+//        user.readBox(user,id);
 
     }
 

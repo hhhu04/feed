@@ -62,7 +62,7 @@ public class FeedController {
     }
 
     @GetMapping(value = "/feed/img",produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<byte[]> storeImg(@RequestParam(name = "image") String img){
+    public ResponseEntity<byte[]> feedImg(@RequestParam(name = "image") String img){
         String url = path+"/"+img;
         try {
             File file = new File(url);
