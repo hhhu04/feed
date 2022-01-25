@@ -73,7 +73,7 @@ public class User implements UserDetails{
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles("ROLE_USER");
         user.setCreatedAt(LocalDateTime.now());
-        user.createBox(user);
+//        user.createBox(user);
         return user;
     }
 
@@ -81,7 +81,7 @@ public class User implements UserDetails{
         user.setRoles("ROLE_USER");
         user.setCreatedAt(LocalDateTime.now());
         user.setType("kakao");
-        user.createBox(user);
+//        user.createBox(user);
         return user;
     }
 
@@ -89,14 +89,14 @@ public class User implements UserDetails{
         user.setRoles("ROLE_USER");
         user.setCreatedAt(LocalDateTime.now());
         user.setType("naver");
-        user.createBox(user);
+//        user.createBox(user);
         return user;
     }
 
     private String path(User user){
-//        String paths = "/img/basket/"+user.getEmail()+".txt";
+        String paths = "/img/basket/"+user.getEmail()+".txt";
 //        String paths = "/home/cat/Desktop/basket/"+user.getUserId()+".txt";
-        String paths = "/home/cat/img/basket/"+user.getEmail()+".txt";
+//        String paths = "/home/cat/img/basket/"+user.getEmail()+".txt";
         return paths;
     }
 

@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class PathConfig implements WebMvcConfigurer {
 
-    @Value("${test.path}")
+    @Value("${test.path}/img")
     private String path;
 
 
