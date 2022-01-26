@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class PathConfig implements WebMvcConfigurer {
+public class MvcConfig implements WebMvcConfigurer {
 
     @Value("${test.path}/img")
     private String path;
