@@ -26,7 +26,7 @@ public class KakaoOauth  {
 
 
     public String getOauthRedirectURL(String host) {
-        String KAKAO_SNS_CALLBACK_URL = "http://"+host+":8080/kakao/callback";
+        String KAKAO_SNS_CALLBACK_URL = "http://"+host+":8888/kakao/callback";
 
         Map<String, Object> params = new HashMap<>();
         params.put("client_id", KAKAO_SNS_CLIENT_ID);
@@ -41,7 +41,7 @@ public class KakaoOauth  {
 
     public String requestAccessToken(String code,String host) {
         RestTemplate restTemplate = new RestTemplate();
-        String KAKAO_SNS_CALLBACK_URL = "http://"+host+":8080/kakao/callback";
+        String KAKAO_SNS_CALLBACK_URL = "http://"+host+":8888/kakao/callback";
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
