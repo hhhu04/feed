@@ -5,7 +5,6 @@ import cat.feed.code.ResponseMessage;
 import cat.feed.code.StatusCode;
 import cat.feed.dto.BuyDto;
 import cat.feed.entity.BuyLogs;
-import cat.feed.entity.Feed;
 import cat.feed.entity.Item;
 import cat.feed.entity.User;
 import cat.feed.jwt.JwtTokenProvider;
@@ -13,25 +12,35 @@ import cat.feed.service.BuyLogService;
 import cat.feed.service.StoreService;
 import cat.feed.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.net.URL;
+import java.nio.file.Files;
+import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
+
+import static io.jsonwebtoken.lang.Classes.getResourceAsStream;
 
 @RestController
 @RequiredArgsConstructor
@@ -72,12 +81,13 @@ public class StoreController {
                 ResponseMessage.CREATED_ITEM,list), HttpStatus.OK);
     }
 
-    @GetMapping("/store/{id}")
+    @GetMapping(value = "/store/{id}")
     public ResponseEntity itemDetail(@RequestHeader HttpHeaders header,
-                             @PathVariable(name = "id") Long id, Model model) {
+                             @PathVariable(name = "id") Long id) {
         try {
             Item item;
-            item = itemService.feedDetail(id);
+            item = itemService.feedDetail(id,path);
+            System.out.println(item);
             String token = header.get("authorization").get(0);
             String user = jwtTokenProvider.getUserPk(token);
             long userId = userService.id(user);
@@ -91,6 +101,29 @@ public class StoreController {
         }
     }
 
+    @GetMapping(value = "/store/img",produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<byte[]> storeImg(@RequestParam(name = "image") String img){
+        String url = path+"/"+img;
+        try {
+            File file = new File(url);
+            BufferedImage image = ImageIO.read(new File(url));
+            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+            ImageIO.write(image,"jpg",ba);
+            ba.flush();
+            HttpHeaders headers = new HttpHeaders();
+            byte[] media = ba.toByteArray();
+            headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+
+            Base64.Encoder encoder = Base64.getEncoder();
+            byte[] encodedBytes = encoder.encode(media);
+
+            ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(encodedBytes, headers, HttpStatus.OK);
+            return responseEntity;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     @GetMapping("/myBasket")
     public String myBasket(Model model,@CookieValue(value = "token", required = false) Cookie cookies){

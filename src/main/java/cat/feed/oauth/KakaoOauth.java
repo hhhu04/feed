@@ -97,14 +97,16 @@ public class KakaoOauth  {
         Map<String, Map<String,String>> map2=null;
         Map<String, String> map3=null;
         String name = null;
+        String id= null;
         try {
             map2 = om.readValue(response.getBody(), Map.class);
-            name = map2.get("kakao_account").get("email");
+//            name = map2.get("kakao_account").get("email");
+            id = String.valueOf(map2.get("id"));
         }
         catch (Exception e){
             e.printStackTrace();
         }
 
-        return name;
+        return id;
     }
 }
