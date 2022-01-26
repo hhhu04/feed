@@ -36,7 +36,7 @@ public class UserController {
     @Value("${test.url}")
     private  String url;
 
-    @Value("localhost")
+    @Value("${test.vue}")
     private String vue;
 
 
