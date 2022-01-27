@@ -63,7 +63,7 @@ public class FeedController {
 
     @GetMapping(value = "/feed/img",produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> feedImg(@RequestParam(name = "image") String img){
-        String url = path+"/"+img;
+        String url = path;
         try {
             File file = new File(url);
             BufferedImage image = ImageIO.read(new File(url));
