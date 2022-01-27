@@ -70,7 +70,7 @@ public class Item {
 
         file.getOriginalFilename();
         if(!file.getOriginalFilename().isEmpty()) {
-            file.transferTo(new File(path+"/img", imgName));
+            file.transferTo(new File(path, imgName));
             img = "img/"+imgName;
             System.out.println("99");
         }else {
