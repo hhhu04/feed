@@ -103,7 +103,7 @@ public class StoreController {
 
     @GetMapping(value = "/store/img",produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> storeImg(@RequestParam(name = "image") String img){
-        String url = path;
+        String url = "/"+img;
         try {
             File file = new File(url);
             BufferedImage image = ImageIO.read(new File(url));
