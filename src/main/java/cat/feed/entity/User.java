@@ -1,9 +1,6 @@
 package cat.feed.entity;
 
-import cat.feed.dto.BuyDto;
 import lombok.*;
-import net.bytebuddy.implementation.bind.annotation.IgnoreForBinding;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 @Entity
 @Getter
@@ -73,7 +69,6 @@ public class User implements UserDetails{
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles("ROLE_USER");
         user.setCreatedAt(LocalDateTime.now());
-//        user.createBox(user);
         return user;
     }
 
@@ -81,7 +76,6 @@ public class User implements UserDetails{
         user.setRoles("ROLE_USER");
         user.setCreatedAt(LocalDateTime.now());
         user.setType("kakao");
-//        user.createBox(user);
         return user;
     }
 
@@ -89,84 +83,21 @@ public class User implements UserDetails{
         user.setRoles("ROLE_USER");
         user.setCreatedAt(LocalDateTime.now());
         user.setType("naver");
-//        user.createBox(user);
         return user;
     }
 
-    private String path(User user){
-        String paths = "/img/basket/"+user.getEmail()+".txt";
-//        String paths = "/home/cat/Desktop/basket/"+user.getUserId()+".txt";
-//        String paths = "/home/cat/img/basket/"+user.getEmail()+".txt";
-        return paths;
-    }
-
-    public void createBox(User user) throws Exception {
-        String paths = user.path(user);
-
-        OutputStream outputStream = new FileOutputStream(paths);
-        outputStream.close();
-
-        user.setBox(paths);
-    }
-
-    public void readBox(User user, long itemId) throws IOException {
-        String paths = user.path(user);
-        BufferedReader read = new BufferedReader(new FileReader(paths));
-        ArrayList<Long> arr = new ArrayList<>();
-
-        while(true){
-            String temp = read.readLine();
-            System.out.println(temp);
-            if(temp == null) break;
-            long id = Long.parseLong(temp);
-            arr.add(id);
-        }
-        arr.add(itemId);
-
-        writeBox(user,arr);
-
-    }
 
     public List<Long> myBox(User user) throws IOException {
-        String paths = user.path(user);
-        BufferedReader read = new BufferedReader(new FileReader(paths));
         ArrayList<Long> arr = new ArrayList<>();
-
-        while(true){
-            String temp = read.readLine();
-            System.out.println(temp);
-            if(temp == null) break;
-            long id = Long.parseLong(temp);
+        String read = user.getBox();
+        String[] sp = read.split("/");
+        for(int i=0; i < sp.length; i++){
+            long id = Long.parseLong(sp[i]);
             arr.add(id);
         }
 
         return arr;
     }
-
-
-    public void writeBox(User user,ArrayList<Long> arr) throws IOException {
-        String paths = user.path(user);
-
-        BufferedWriter write = new BufferedWriter(new FileWriter(paths));
-
-        for(long i:arr){
-            write.write(i+"\n");
-        }
-        write.flush();
-        write.close();
-
-    }
-
-    public void boxReload(User user) throws Exception {
-        String paths = user.path(user);
-
-        BufferedWriter write = new BufferedWriter(new FileWriter(paths));
-        write.write("");
-        write.flush();
-        write.close();
-
-    }
-
 
 
     ////JWT관련

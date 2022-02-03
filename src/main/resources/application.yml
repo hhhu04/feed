@@ -1,7 +1,6 @@
 test:
 #  url: 192.168.88.130
   url: 18.216.46.202
-#  url: 1
 #  path: /home/cat
   path: /img
   vue: 18.216.46.202

@@ -208,18 +208,16 @@ public class StoreController {
 
 
 
-    @PostMapping("/store/insertBox")
-    @ResponseBody
-    public int insert(@CookieValue(value = "token", required = false) Cookie cookies, @RequestBody Item item){
+    @PutMapping("/store/insert_box")
+    public int insert(@RequestHeader HttpHeaders header, @RequestBody Item item){
 
         try{
             User user = new User();
-            String token = cookies.getValue();
+            String token = header.get("authorization").get(0);
             String userId = jwtTokenProvider.getUserPk(token);
+            item = itemService.insertBox(item);
             if(item.getTotal() == 0) return -1;
-            item = itemService.insertBox(userId, item);
             userService.insertBox(userId,item.getId(),user);
-
         }
         catch (Exception e){
             e.printStackTrace();
