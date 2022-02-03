@@ -108,14 +108,17 @@ public class UserService  {
 //장바구니에 물품 추가
     public void insertBox(String userId, Long id,User user) throws IOException {
         user = userRepository.findUserByEmail(userId);
-//        user.readBox(user,id);
-
+        String box = user.getBox()+"/"+id;
+        user.setBox(box);
+        System.out.println(user.getBox());
+        userRepository.save(user);
     }
 
 
     public User boxReload(String userId) throws Exception {
         User user = userRepository.findUserByEmail(userId);
-        user.boxReload(user);
+        user.setBox("");
+        userRepository.save(user);
         return user;
     }
 

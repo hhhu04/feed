@@ -4,6 +4,7 @@ import cat.feed.dto.BuyDto;
 import cat.feed.entity.Item;
 import cat.feed.entity.User;
 import cat.feed.repository.ItemRepository;
+import cat.feed.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class StoreService {
 
     private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
 
     public List<Item> findAll() {
         return itemRepository.findAll();
@@ -41,12 +43,11 @@ public class StoreService {
         return 1;
     }
 
-    public Item insertBox(String userId, Item item) throws Exception{
+    public Item insertBox(Item item) throws Exception{
         return itemRepository.findItemById(item.getId());
     }
 
     public List<Item> myBox(List<Item> item, User user) throws IOException {
-        System.out.println("!23");
         List<Long> arr = new ArrayList<>();
         arr = user.myBox(user);
         item = itemRepository.findAllById(arr);
