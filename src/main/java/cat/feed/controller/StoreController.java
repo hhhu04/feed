@@ -125,40 +125,30 @@ public class StoreController {
         }
     }
 
-    @GetMapping("/myBasket")
-    public String myBasket(Model model,@CookieValue(value = "token", required = false) Cookie cookies){
+    @GetMapping("/basket")
+    public ResponseEntity myBasket(@RequestHeader HttpHeaders header){
         User user = new User();
         List<Item> item = new ArrayList<>();
 
         try{
-            String token = cookies.getValue();
+            String token = header.get("authorization").get(0);
             String userId = jwtTokenProvider.getUserPk(token);
 
             user.setEmail(userId);
             user = userService.userInfo(user);
 
             item = itemService.myBox(item,user);
-            int num = item.size();
 
-            List<Long> buyList = new ArrayList<>();
-            int totalPrice = 0;
-
-            for(int i=0 ; i<item.size(); i++){
-                buyList.add(item.get(i).getId());
-                totalPrice = totalPrice + item.get(i).getPrice();
-            }
-
-            model.addAttribute("item",item);
-            model.addAttribute("num",num);
-            model.addAttribute("list",buyList);
-            model.addAttribute("totalPrice",totalPrice);
-
+            return new ResponseEntity(Res.res(StatusCode.OK,
+                    ResponseMessage.READ_ITEM,item), HttpStatus.OK);
 
         }catch (Exception e){
             e.printStackTrace();
+            return new ResponseEntity(Res.res(StatusCode.INTERNAL_SERVER_ERROR,
+                    ResponseMessage.READ_ITEM,e), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return "store/myBox";
+
     }
 
 //
