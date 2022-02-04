@@ -91,7 +91,7 @@ public class User implements UserDetails{
         ArrayList<Long> arr = new ArrayList<>();
         String read = user.getBox();
         String[] sp = read.split("/");
-        for(int i=0; i < sp.length; i++){
+        for(int i=1; i < sp.length; i++){
             long id = Long.parseLong(sp[i]);
             arr.add(id);
         }
