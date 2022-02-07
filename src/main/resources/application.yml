@@ -9,11 +9,11 @@ test:
 spring:
   datasource:
 #    url: jdbc:mysql://localhost:3306/feed?sueSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
-    url: jdbc:mysql://118.67.133.148:3306/feed?sueSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
-#    url: jdbc:mysql://database-1.cndbyzmembzk.us-east-2.rds.amazonaws.com:3306/feed
+#    url: jdbc:mysql://118.67.133.148:3306/feed?sueSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://database-1.cndbyzmembzk.us-east-2.rds.amazonaws.com:3306/feed
     password: 12345678
-#    username: root
-    username: sample
+    username: root
+#    username: sample
   jpa:
     properties:
       hibernate:
