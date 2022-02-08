@@ -58,6 +58,9 @@ public class StoreController {
     @Value("${test.path}")
     private String path;
 
+    @Value("${test.vue}")
+    private String vue;
+
     @GetMapping("/store")
     public String store(Model model, @CookieValue(value = "token", required = false) Cookie cookie) {
         try {
@@ -218,25 +221,24 @@ public class StoreController {
 
 
     @PostMapping("/store/payment")
-    @ResponseBody
-    public List<String> payment(@CookieValue(value = "token", required = false) Cookie cookies, @RequestBody BuyDto dto, HttpSession session){
+    public List<String> payment(@RequestHeader HttpHeaders header,@RequestBody BuyDto dto, HttpSession session){
         List<String> list = new ArrayList<>();
         try {
-            String token = cookies.getValue();
+            String token = header.get("authorization").get(0);
             String userId = jwtTokenProvider.getUserPk(token);
+            dto.setItems(userService.getBox(userId));
 
-            list = itemService.buy(userId,dto,url);
+
+            list = itemService.buy(userId,dto,vue);
             String tradeNumber = list.get(1);
             list.remove(1);
 
             String tid = list.get(1);
             list.remove(1);
 
-            session.setAttribute("trade",tradeNumber);
-
-            session.setAttribute("tid",tid);
-
-            session.setAttribute("dto",dto);
+            list.add(tradeNumber);
+            list.add(tid);
+            list.add(Integer.toString(dto.getTotalPrice()));
 
             return list;
 
@@ -250,18 +252,21 @@ public class StoreController {
     }
 
     @GetMapping("/store/ok")
-    public String ok(@CookieValue(value = "token", required = false) Cookie cookies, BuyDto dto,
-                     @RequestParam String pg_token, Model model,HttpSession session){
+    public String ok(@RequestHeader HttpHeaders header, BuyDto dto,
+                     @RequestParam String pg_token,HttpSession session,
+                     @RequestParam String tradeNumber,
+                     @RequestParam String tids,
+                     @RequestParam int price){
 
         Map<String, String> map = new HashMap<>();
 
         try{
 
-            String token = cookies.getValue();
+
+            String token = header.get("authorization").get(0);
             String userId = jwtTokenProvider.getUserPk(token);
-            String tradeNumber = (String) session.getAttribute("trade");
-            String tids = (String) session.getAttribute("tid");
-            dto = (BuyDto) session.getAttribute("dto");
+            dto.setItems(userService.getBox(userId));
+            dto.setTotalPrice(price);
 
             session.invalidate();
 
@@ -273,7 +278,7 @@ public class StoreController {
             List<String> itemNames = new ArrayList<>();
 
             user = userService.boxReload(userId);
-            items = itemService.idToName(dto,items);
+            items = itemService.idToName(dto);
             itemNames = dto.idToName(items,itemNames);
 
             buyLogService.save(map,itemNames,user,buyLogs);
@@ -285,7 +290,7 @@ public class StoreController {
         }
 
 
-        return "sample/ok";
+        return "ok";
     }
 
     @GetMapping("/store/cencel")

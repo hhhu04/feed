@@ -9,12 +9,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserService  {
 
     private final PasswordEncoder passwordEncoder;
@@ -135,5 +137,9 @@ public class UserService  {
     public void rePass(User user, User user2) {
         user2.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user2);
+    }
+
+    public String getBox(String userId) {
+        return userRepository.findByEmail(userId).get().getBox();
     }
 }
