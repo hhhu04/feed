@@ -4,6 +4,7 @@ test:
 #  path: /home/cat
   path: /img
   vue: 18.216.46.202
+#  vue: 192.168.202.1
 
 
 spring:

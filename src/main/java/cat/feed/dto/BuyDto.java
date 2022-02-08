@@ -19,7 +19,7 @@ import java.util.Map;
 @Data
 public class BuyDto {
 
-    private List<Long> items;
+    private String items;
 
     private int totalPrice;
 
@@ -27,7 +27,7 @@ public class BuyDto {
 
     public List<String> buy(String userId, BuyDto dto, String path) {
         String admin = "23b3eeb10257d6952a5b9531776274de";
-        path ="http://"+  path + ":8080";
+        path ="http://"+  path + ":8000";
 
         String tradeNumber =Integer.toString(LocalDateTime.now().getYear())+Integer.toString(LocalDateTime.now().getMonthValue())+
                 Integer.toString(LocalDateTime.now().getHour())+Integer.toString(LocalDateTime.now().getMinute())+Integer.toString(LocalDateTime.now().getSecond());
@@ -35,7 +35,7 @@ public class BuyDto {
         RestTemplate restTemplate = new RestTemplate();
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        String local =path + "/store/ok";
+        String local =path + "/ok";
 
         params.add("cid","TC0ONETIME");
         params.add("partner_order_id", tradeNumber);
@@ -45,8 +45,8 @@ public class BuyDto {
         params.add("total_amount",Integer.toString(dto.getTotalPrice()));
         params.add("tax_free_amount","0");
         params.add("approval_url",local);
-        params.add("cancel_url",path+"/store/ok");
-        params.add("fail_url",path+"/store/ok");
+        params.add("cancel_url",path+"/ok");
+        params.add("fail_url",path+"/ok");
 
 
         String Authorization ="KakaoAK "+admin;
@@ -147,5 +147,15 @@ public class BuyDto {
         }
 
         return list;
+    }
+
+    public List<Long> setLong(BuyDto dto, List<Long> items) {
+        String[] sp = dto.getItems().split("/");
+
+        for(int i = 1; i < sp.length; i++){
+            items.add(Long.valueOf(sp[i]));
+        }
+
+        return items;
     }
 }
