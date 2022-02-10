@@ -165,7 +165,6 @@ public class UserController {
             cookie.setMaxAge(30*60);
             response.addCookie(cookie);
             return "<script> window.location = 'http://"+vue+":8000/social?token="+token+"'  </script>";
-//            return "<script> window.opener.result("+token+");  </script>";
         } else {
             return "<script>alert('가입진행. '); window.location = 'http://"+vue+":8000/join/"+socialLoginType+"/"+email+"'</script>";
         }
